@@ -11,6 +11,10 @@ class Linked_list:
     def __init__(self, head=None):
         self.head_node = Node(head)
 
+    #giving a string representation of the list
+    def __str__(self):
+        return "A linked list with {} as head".format(self.head_node.data)
+
     #add a new head node
     def set_new_head(self, data):
         new_head = Node(data)

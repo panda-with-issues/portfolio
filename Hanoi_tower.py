@@ -14,43 +14,16 @@ class Hanoi_stack(Stack):
 
     #overwriting string representation
     def __str__(self):
-        chunks = [" ", "#", "-"]
-        stack_chunked = []
+        return "This is the {} stack".format(self.position)
 
-        #get size of each disk currently on stack plus floor length
-        disks_lengths = [2 * i + 1 for i in range(self.size+1)]
-
-        #draw the stack
-        for length in disks_lengths:
-
-            #draw disks
-            if length != disks_lengths[-1]:
-                disk_structure = []
-                n_blanks_per_part = int((disks_lengths[-1] - length) / 2)
-                disk_structure.append(n_blanks_per_part)
-                disk_structure.append(length)
-                disk_structure.append(n_blanks_per_part)
-                disk_chunked = []
-                for i in range(len(disk_structure)):
-                    if i % 2 == 0:
-                        for blank in range(disk_structure[i]):
-                            disk_chunked.append(chunks[0])
-                    else:
-                        for unit in range(disk_structure[i]):
-                            disk_chunked.append(chunks[1])
-                disk_strfd = "".join(disk_chunked)
-                stack_chunked.append(disk_strfd)
-            
-            #draw the floor
-            else:
-                floor_chuncked = []
-                for tile in range(length):
-                    floor_chuncked.append(chunks[2])
-                floor_strfd = "".join(floor_chuncked)
-                stack_chunked.append(floor_strfd)
-
-        stack_strfd = "\n".join(stack_chunked)
-        return stack_strfd
+    #making stack iterable
+    def __iter__(self):
+        iterable = []
+        current_disk = self.top
+        while current_disk:
+            iterable.append(current_disk)
+            current_disk = current_disk.next_node
+        return iterable
 
 """
 setting up the game
@@ -80,33 +53,82 @@ while True:
 #placing disks on left stack
 for i in range(disks, 0, -1):
     left_stack.push(i)
-print(left_stack.peek(), left_stack.size)
+
+#giving disks a visual representation
+chunks =[" ", "#"]
+disks_lengths = [2 * i + 1 for i in range(disks)]
+disks_strfd = []
+for disk in disks_lengths:
+    disk_structure = []
+    n_blanks_per_part = int((disks_lengths[-1] - disk) / 2) + 1
+    disk_structure.append(n_blanks_per_part)
+    disk_structure.append(disk)
+    disk_structure.append(n_blanks_per_part)
+    disk_chunked = []
+    for index in range(len(disk_structure)):
+        for i in range(disk_structure[index]):
+            chunk = index % 2
+            disk_chunked.append(chunks[chunk])
+    disks_strfd.append("".join(disk_chunked))
+
+#mapping each disk with its own visual representation
+disk_to_visual = {disk.data:string for disk, string in zip(left_stack.__iter__(), disks_strfd)}
+filler_chuncked = [chunks[0] for letter in disks_strfd[0]] #actually can be any index
+ground_chuncked = ["-" for letter in disks_strfd[0]]
+disk_to_visual.update({-1:"".join(filler_chuncked), 0:"".join(ground_chuncked)})
+
+#print current stack status
+def print_screen():
+    
+    levels = []
+
+    max_level = 0
+    for stack in stacks:
+        if stack.size > max_level:
+            max_level = stack.size
+    
+    for i in range(max_level, -1, -1):
+        level_structure = []
+        for stack in stacks:
+            if i == 0:
+                level_structure.append(disk_to_visual[0])
+            elif stack.size > i:
+                delta = stack.size - i
+                disk_to_append = stack.top
+                for ii in range(delta):
+                    disk_to_append = disk_to_append.next_node
+                level_structure.append(disk_to_visual[disk_to_append.data])
+            elif stack.size == i:
+                level_structure.append(disk_to_visual.get(stack.peek()))
+            else:
+                level_structure.append(disk_to_visual[-1])
+        levels.append("".join(level_structure))
+    
+    for level in levels:
+        print(level)
 
 #prompting the optimal number of moves to solve the game
 n_optimal_moves = 2 ** disks - 1
 print("\nThe fastest way you can solve this game is in {} moves\n\n".format(n_optimal_moves))
 
-#ask user which stack they want to choose
-def get_stack():
+#ask user which stack they want to choose. If anything is passed, allow user to redo previous choice
+def get_stack(q=False):
     valid_input = [stack.position[0] for stack in stacks]
+    if q:
+        valid_input.append("q")
     while True:
-        user_input = input(" ").lower().strip()
+        user_input = input("").lower().strip()
         if user_input in valid_input:
+            if user_input == "q":
+                return False
             for stack in stacks:
                 if user_input == stack.position[0]:
                     return stack
-        else:
-            for stack in stacks:
-                print("Enter {letter} for {position} stack".format(letter=stack.position[0], position=stack.position))
-            continue
-
-#print current stack status
-def print_screen():
-    strfy = []
-    for stack in stacks:
-        strfy.append(stack.__str__())
-    strfd = "".join(strfy)
-    print(strfd)
+        for stack in stacks:
+            print("Enter {letter} for {position} stack".format(letter=stack.position[0], position=stack.position))
+        if q:
+            print("Enter q to pick from another stack")
+        continue
 
 """
 Start game routine
@@ -118,17 +140,44 @@ n_moves = 0
 while right_stack.size < disks:
 
     #prompt stacks
+    print("\n")
     print_screen()
 
     #set turn routine
     while True:
-        print("Take a disk from: ")
+
+        #pick a disk
+        print("\nWhere do you want to take the disk from? [l, m, r]:")
         from_stack = get_stack()
+
         #validating move
         if from_stack.is_empty():
-            print("There's nothing to pick there")
+            print("\nThere's nothing to pick up there")
             continue
-        while from_stack:
-            print("And move it to: ")
-            to_stack = get_stack()
-            if 
+
+        #choose where disk is to be pushed or choose another stack to pick up from    
+        print("Where do you want to put the disk? [l, m, r, q]")
+        to_stack = get_stack("foo")
+        if to_stack:
+                           
+            #validating move
+            if not to_stack.is_empty() and from_stack.peek() > to_stack.peek():
+                print("You can't put a disk onto a smaller one")
+                continue
+                
+            #move the disk
+            else:
+                to_stack.push(from_stack.pop())
+                n_moves += 1
+                break
+        break
+
+"""
+End game
+"""
+print_screen()
+print("Congratulation, you beated the game!")
+print("You made {} moves.".format(n_moves))
+if n_moves == n_optimal_moves:
+    print("Amazing, you finished the game as fast as possible!")
+input("Press any key to exit this program. See you soon!")

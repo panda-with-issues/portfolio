@@ -10,12 +10,19 @@ class TreeNode:
         #here every current node's child node is listed
         self.children = []
         #distance from root node
-        self.level = None
+        self.level = 0
+
+    def __str__(self):
+        return "A node with data {}".format(self.data)
     
     #add child to a node 
-    def add_child(self, data):
-        new_node = __init__(data)
-        self.children
+    def add_child(self, new_node):
+        new_node.level = self.level + 1
+        self.children.append(new_node)
+
+    #remove a node's child
+    def remove_child(self, kill_me):
+        self.children = [child for child in self.children if child is not kill_me]
 
 
 class Tree:
@@ -37,3 +44,13 @@ class Tree:
             root = TreeNode(root)
         self.root = root
         self.root.level = 0
+
+    #add a child to a given node. If child is not a node, instantiate it. Share interface with similar TreeNode's method
+    def add_child(self, parent, child):
+        if type(child) != TreeNode:
+            child = TreeNode(child)
+        parent.add_child(child)
+
+    #print a visual representation of Tree
+    def graph(self):
+        

@@ -3,6 +3,7 @@ Complex Data Structure
 Tree implementation in Python3
 """
 
+
 class TreeNode:
 
     def __init__(self, data):
@@ -96,6 +97,7 @@ class Tree:
 class BranchOverflow(Exception):
     "BranchOverflow Error: this node can't have more than two children"
 
+
 #in this subclass, every node can have at most two children
 class BinaryTreeNode(TreeNode):
 
@@ -105,7 +107,7 @@ class BinaryTreeNode(TreeNode):
         if type(data) == str:
             self.value = sum(data.encode())
         elif type(data) == list or type(data) == dict or type(data) == tuple:
-            self.value = len(data)
+            raise TypeError
         elif type(data) == float:
             self.value = round(float)
         else:
@@ -130,6 +132,7 @@ class BinaryTreeNode(TreeNode):
         else:
             raise BranchOverflow
 
+
 class BinaryTree(Tree):
 
     def __init__(self, root=None):
@@ -138,7 +141,6 @@ class BinaryTree(Tree):
             self.root.level = 0
         else:
             self.root = root
-
 
     def __str__(self):
         return "A binary tree with root {}".format(self.root)
@@ -176,12 +178,15 @@ class BinaryTree(Tree):
                 current_node = current_node.children[0]
             else:
                 current_node = current_node.children[1]
-                    
-        
-import random
-tree = BinaryTree(50)
-nodini = [random.randint(0, 100) for n in range(10)]
-print(nodini)
-for cosa in nodini:
-    tree.add_child(cosa)
-tree.graph()
+
+    #fastening traverse method
+    def traverse(self, data):
+        data_node = BinaryTreeNode(data)
+        current_node = self.root
+        while current_node:
+            if current_node.data == data:
+                return current_node
+            elif len(current_node.children) == 2 and data_node.value >= current_node.value:
+                current_node = current_node.children[1]
+            else:
+                current_node = current_node.children[0]

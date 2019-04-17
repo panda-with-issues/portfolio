@@ -114,13 +114,19 @@ class BinaryTreeNode(TreeNode):
     def __str__(self):
         return "A binary node with data {}".format(self.data)
 
-    #update method to check whether the node has less than two children
+    #update method to check whether the node has less than two children and to always have the smaller child at index 0
     def add_child(self, child):
         if len(self.children) < 2:
             if type(child) != BinaryTreeNode:
                 child = BinaryTreeNode(child)
             self.children.append(child)
             child.level = self.level + 1
+            #check order
+            if len(self.children) == 2:
+                first = self.children[0]
+                second = self.children[1]
+                if first.value > second.value:
+                    self.children.reverse()
         else:
             raise BranchOverflow
 
@@ -141,27 +147,36 @@ class BinaryTree(Tree):
     def add_child(self, child):
         if type(child) != BinaryTreeNode:
             child = BinaryTreeNode(child)
+
         current_node = self.root
         while current_node:
-            print("adding " + str(child.value))
-            try:
+
+            #if current node has no child, add child and exit the loop
+            if len(current_node.children) == 0:
                 current_node.add_child(child)
-                #arrange children in order to have the smaller value at index 0
-                if len(current_node.children) == 2 and current_node.children[0].value > current_node.children[1].value:
-                    current_node.children.reverse()
-                print("added at " + str(current_node.data))
-                if len(current_node.children) > 1:
-                    print(current_node.children[0], current_node.children[1])
-                else:
-                    print(current_node.children[0].value)
                 break
-            except BranchOverflow:
-                print(child.value, current_node.value, current_node.children[0].value, current_node.children[1].value)
-                if child.value >= current_node.value:
-                    current_node = current_node.children[1]
+
+            #if current node already has a child, two case must be dinguished: if child is a right node or a left node
+            elif len(current_node.children) == 1:
+                
+                #if child is a left node (minor than parent), a child can be added only if its value is greater than parent's
+                if current_node.value > current_node.children[0].value and child.value >= current_node.value:
+                    current_node.add_child(child)
+                    break
+                #if child is a right node (greater than or equal to parent), a child can be added only if its value is minor than parent's
+                elif current_node.value <= current_node.children[0].value and child.value < current_node.value:
+                    current_node.add_child(child)
+                    break
+                #otherwise move to existing child
                 else:
                     current_node = current_node.children[0]
-                print(current_node)
+            
+            #if current node alrady has two child, move to left node if child's value is minor than parent's; else move right
+            elif child.value < current_node.value:
+                current_node = current_node.children[0]
+            else:
+                current_node = current_node.children[1]
+                    
         
 import random
 tree = BinaryTree(50)

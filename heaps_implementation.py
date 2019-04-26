@@ -35,13 +35,37 @@ class MinHeap:
     end helper
     """
 
-    #when adding, always check whether the heap's property is satisfied (child must be greater than parent). If not, heapify up
+    #sanitize heap when updating the dataset keeping children greater than parents
+    def heapify_up(self):
+        child_index = len(self.dataset) - 1
+        while child_index > 1:
+            child = self.dataset[child_index]
+            parent_index = self.get_parent_index(child_index)
+            parent = self.dataset[parent_index]
+            if child < parent:
+                self.dataset[parent_index] = child
+                self.dataset[child_index] = parent
+                child_index = parent_index
+            else:
+                break
+
+    #add data to dataset and sanitize array heapifying up
     def add(self, data):
         #check whether data is a numeric data object
         if type(data) != int and type(data) != float:
             raise TypeError
+        #insert data
         self.dataset.append(data)
-        data_index = len(self.dataset) - 1
-        parent_index = self.get_parent_index(data_index)
-        
+        #if there are more than one piece of data, heapify up
+        if len(self.dataset) > 2:
+            self.heapify_up()
+        print(self.dataset)
 
+"""
+debug
+"""
+mucchio = MinHeap()
+from random import randrange
+for i in range(10):
+    mucchio.add(randrange(0,31))
+print(mucchio.dataset)

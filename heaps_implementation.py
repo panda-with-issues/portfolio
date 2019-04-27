@@ -86,9 +86,6 @@ class MinHeap:
             else:
                 break
 
-             
-
-
     #remove and return the minimum value into the array. The last element of the list is put in its place. Then sanitize the array heapifing down
     def retrieve(self):
         #check whether there is anything to return
@@ -101,17 +98,42 @@ class MinHeap:
             self.heapify_down()
             return root
 
-class MaxHeap:
 
-    def __init__(self):
-        self.dataset = []
-"""
-debug
-"""
-mucchio = MinHeap()
-from random import randrange
-for i in range(10):
-    mucchio.add(randrange(0,50))
-print(mucchio.dataset)
-for i in range(11):
-    print(mucchio.retrieve(), mucchio.dataset)
+class MaxHeap(MinHeap):
+    #this class work exactly like the previous one, except in heapifying methods. Where the MinHeap makes comparisons between child and parent, MaxhHeap changes the
+    #comparison's direction: greater becomes lesser and viceversa.
+
+    def __str__(self):
+        return "A maximum heap"
+
+    def heapify_up(self):
+        child_index = len(self.dataset) - 1
+        while child_index > 1:
+            child = self.dataset[child_index]
+            parent_index = self.get_parent_index(child_index)
+            parent = self.dataset[parent_index]
+            if child > parent:
+                self.dataset[child_index] = parent
+                self.dataset[parent_index] = child
+                child_index = parent_index
+            else:
+                break
+
+    def heapify_down(self):
+        parent_index = 1
+        while self.has_child(parent_index):
+            parent = self.dataset[parent_index]
+            child_index = self.get_left_child_index(parent_index)
+            child = self.dataset[child_index]
+            if child_index + 1 < len(self.dataset):
+                right_child_index = self.get_right_child_index(parent_index)
+                right_child = self.dataset[right_child_index]
+                if right_child > child:
+                    child = right_child
+                    child_index = right_child_index
+            if parent < child:
+                self.dataset[parent_index] = child
+                self.dataset[child_index] = parent
+                parent_index = child_index
+            else:
+                break

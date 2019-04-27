@@ -23,23 +23,19 @@ class MinHeap:
     """
 
     def get_parent_index(self, index):
-        parent_index = index // 2
-        return parent_index
+        return index // 2
 
     def get_left_child_index(self, index):
-        child_index = index * 2
-        return child_index
+        return index * 2
 
     def get_right_child_index(self, index):
-        child_index = index * 2 + 1
-        return child_index
+        return index * 2 + 1
 
-    def has_child(self, data):
-        data_index = self.dataset.index(data)
-        return self.get_left_child_index(data_index) < len(self.dataset)
+    def has_child(self, index):
+        return self.get_left_child_index(index) < len(self.dataset)
 
     """
-    end helper
+    end helpers
     """
 
     #sanitize heap when updating the dataset keeping children greater than parents
@@ -71,20 +67,20 @@ class MinHeap:
     #sanitize the array pushing down the root untill it meets bigger children. When it's parent of two children, swap always with the smaller
     def heapify_down(self):
         parent_index = 1
-        while self.has_child(parent):
+        while self.has_child(parent_index):
             parent = self.dataset[parent_index]
             child_index = self.get_left_child_index(parent_index)
             child = self.dataset[child_index]
-            right_child_index = self.get_right_child_index(parent_index)
             #if there is a right child
-            if left_child_index + 1 < len(self.dataset):
+            if child_index + 1 < len(self.dataset):
+                right_child_index = self.get_right_child_index(parent_index)
                 right_child = self.dataset[right_child_index]
                 #if right child is bigger than left one, compare parent with it instead of comparing with left child
-                if right_child < left_child:
+                if right_child < child:
                     child = right_child
                     child_index = right_child_index
             if parent > child:
-                self.dataset[parent] = child
+                self.dataset[parent_index] = child
                 self.dataset[child_index] = parent
                 parent_index = child_index
             else:
@@ -100,17 +96,22 @@ class MinHeap:
             print("Heap is empty")
         else:
             root = self.dataset[1]
-            new_root = self.dataset.pop()
-            self.dataset[1] = new_root
+            self.dataset[1] = self.dataset[-1]
+            self.dataset.pop()
             self.heapify_down()
             return root
 
+class MaxHeap:
+
+    def __init__(self):
+        self.dataset = []
 """
 debug
 """
 mucchio = MinHeap()
 from random import randrange
 for i in range(10):
-    mucchio.add(randrange(0,31))
+    mucchio.add(randrange(0,50))
 print(mucchio.dataset)
-print(self.retrieve)
+for i in range(11):
+    print(mucchio.retrieve(), mucchio.dataset)

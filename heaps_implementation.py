@@ -62,7 +62,6 @@ class MinHeap:
         #if there are more than one piece of data, heapify up
         if len(self.dataset) > 2:
             self.heapify_up()
-        print(self.dataset)
 
     #sanitize the array pushing down the root untill it meets bigger children. When it's parent of two children, swap always with the smaller
     def heapify_down(self):

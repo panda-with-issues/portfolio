@@ -77,11 +77,11 @@ Quicksort
 def quicksort(lst, start, end):
 
     # base case: subarray contains at most 1 element
-    if len(lst) <= 1:
+    if start >= end:
         return lst
 
     # inductive case: we choose a random pivot element
-    pivot_idx = randrange(0, len(lst))
+    pivot_idx = randrange(0, end+1)
 
     # now we swap elements in order to have in the leftmost place every value lesser than the pivot and viceversa. We swap the pivot with last element so we can always find it
     # later
@@ -93,17 +93,53 @@ def quicksort(lst, start, end):
     leftmost_idx = 0
     current_idx = 0
 
-    while current_idx <= end:
-        if lst[current_idx] < lst[pivot_idx]:
+    while current_idx < end:
+        if lst[current_idx] < lst[end]:
             lst[current_idx], lst[leftmost_idx] = lst[leftmost_idx], lst[current_idx]
             leftmost_idx += 1
         current_idx += 1
     
-    print(lst[pivot_idx], lst)
+    #after having traversed the array, swap the pivot with the leftmost pointer: in this way we have partitioned the array
+    lst[leftmost_idx], lst[end] = lst[end], lst[leftmost_idx]
+    
+    #recursive step: function is called on left and right sublist untill they meet the base case
+    return quicksort(lst, start, leftmost_idx-1), quicksort(lst, leftmost_idx+1, end)
 
+"""
+Radix sort
+"""
 
+# Radix sort sorts element by comparing every i-th digit of every element untill every digit is been checked. Elements are placed in ten buckets, one for every digit, and
+# rearranged at every traverse. We will implement this algorithm with the LSD variant, that is starting our sorting by the rightmost digit. This method doesn't use comparisons
+# and has the quickest runtime with O(N) 
 
+def radix_sort(lst):
 
+    exp = 0
+    ordered_lst = lst.copy()
+
+    while True:
+        
+        buckets = [[] for i in range(10)]
+
+        # we place elements into the proper bucket basing of the digit we are considering
+        for element in ordered_lst:
+            element_clean = element // 10**exp
+            last_digit = element_clean % 10
+            buckets[last_digit].append(element)
+
+        # we then reorder the list following the buckets
+        ordered_lst = []
+        for i in range(10):
+            ordered_lst += buckets[i]
+        
+        # if every element is in 0's bucket, we reached the end of the algorithm
+        if len(buckets[0]) == len(lst):
+            return ordered_lst
+
+        # else we empty the buckets and check the next digit to the left
+        else:
+            exp += 1
 
 """
 DEBUG
@@ -111,4 +147,5 @@ DEBUG
 
 unsorted = [randrange(0, 501) for i in range(11)]
 print(unsorted)
-quicksort(unsorted, 0, len(unsorted)-1)
+quicksort(unsorted, 0, len(unsorted) - 1)
+print(unsorted)

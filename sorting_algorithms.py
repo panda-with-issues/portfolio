@@ -140,12 +140,3 @@ def radix_sort(lst):
         # else we empty the buckets and check the next digit to the left
         else:
             exp += 1
-
-"""
-DEBUG
-"""
-
-unsorted = [randrange(0, 501) for i in range(11)]
-print(unsorted)
-quicksort(unsorted, 0, len(unsorted) - 1)
-print(unsorted)

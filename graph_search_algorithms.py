@@ -34,8 +34,33 @@ def dfs(graph, current_vertex, target, visited=None, path=None):
             if possible_path:
                 return possible_path
             else:
-                path.remove(adjacent)      
+                path.remove(adjacent)
 
+"""
+BFS: Breadth first search
+"""
+# BFS proceeds breadthwise in order to find a path between an origin vertex and a target. At every step, it checks every adjacent vertex to the current one and returns when
+# the target is found or every vertex in the graph has been visited.
+# BFS will be implemented using a queue data structure.
+# BFS has a runtime of O(V + E) (see DFS runtime) and is very efficient when we want to find the shortest path between two vertices
+
+def bfs(graph, origin, target):
+
+    path = [origin]
+    vertex_and_path = [origin, path]
+    q = [vertex_and_path]
+    visited = []
+    while q:
+        current_vertex, path = q.pop(0)
+        visited.append(current_vertex)
+        for adjacent in graph[current_vertex]:
+            if adjacent not in visited:
+                if adjacent == target:
+                    return path + [adjacent]
+                if adjacent not in [vertex_and_path[0] for vertex_and_path in q]:
+                    q.append([adjacent, path + [adjacent]])
+                
+    
 """
 DEBUG
 """
@@ -55,15 +80,13 @@ graph = {
     'N': ['H']
 }
 
-print(dfs(graph, 'I', 'F'))
-print(dfs(graph, 'A', 'E'))
-print(dfs(graph, 'I', 'G'))
-print(dfs(graph, 'C', 'E'))
-print(dfs(graph, 'B', 'D'))
-print(dfs(graph, 'N', 'G'))
-print(dfs(graph, 'B', 'H'))
-print(dfs(graph, 'E', 'A'))
-print(dfs(graph, 'E', 'H'))
-print(dfs(graph, 'C', 'F'))
-print(dfs(graph, 'L', 'A'))
-print(dfs(graph, 'B', 'N'))
+print(bfs(graph, 'A', 'L'))
+print(bfs(graph, 'E', 'I'))
+print(bfs(graph, 'G', 'N'))
+print(bfs(graph, 'B', 'D'))
+print(bfs(graph, 'E', 'D'))
+print(bfs(graph, 'N', 'D'))
+
+
+
+

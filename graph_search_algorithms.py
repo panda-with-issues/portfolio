@@ -60,14 +60,56 @@ def bfs(graph, origin, target):
                 if adjacent not in [vertex_and_path[0] for vertex_and_path in q]:
                     q.append([adjacent, path + [adjacent]])
                 
+
+"""
+Dijkstra's algorithm
+"""
+# Unlike the BFS, Dijkstra's algorithm find the most economic path between two vertices. To find this path Dijkstra uses an hash map, in which each vertex is mapped with its distance from origin,
+# and a min heap, used to update the hash map.
+# Dijkstra's runtime is O((V + E)logV).
+
+# with this module we can assign an infinity represantation when initializing the hash map
+from math import inf
+
+# this library can be found in this very repository
+from heaps_implementation import MinHeap
+
+def dijkstra(graph, origin, target):
+
+    # set up
+    map = {vertex: inf for vertex in graph}
+    map[origin] = 0
+    heap = MinHeap()
+    heap.add((map[origin], origin))
+    path = [origin]
+    paths = {origin: path}
+    visited = []
+
+    # search routine: graph must be traversed entirely in order to avoid bugs with adjacent vertices (in the given debug graph, A and C will bug the program returning
+    # [A, C] instead of [A, I, D, C])
+    while len(heap.dataset) > 1:
+        current_distance, current_vertex = heap.retrieve()
+        visited.append(current_vertex)
+        for adjacent, weight in graph[current_vertex]:
+            if adjacent not in visited:
+                distance = current_distance + weight
+                if distance < map[adjacent]:
+                    map[adjacent] = distance
+                    heap.add((distance, adjacent))
+                    paths[adjacent] = paths[current_vertex] + [adjacent]
     
+    # path restitution
+    return paths.get(target)
+    
+
+
 """
 DEBUG
 """
 
 graph = {
     'A': ['B', 'C', 'I'],
-    'B': ['C'],
+    'B': ['A', 'C'],
     'C': ['A', 'B', 'D', 'F', 'L'],
     'D': ['C', 'I'],
     'E': ['L'],
@@ -80,13 +122,28 @@ graph = {
     'N': ['H']
 }
 
-print(bfs(graph, 'A', 'L'))
-print(bfs(graph, 'E', 'I'))
-print(bfs(graph, 'G', 'N'))
-print(bfs(graph, 'B', 'D'))
-print(bfs(graph, 'E', 'D'))
-print(bfs(graph, 'N', 'D'))
+dijkstra_graph = {
+    'A': [('B', 7), ('C', 10), ('I', 1)],
+    'B': [('A', 7), ('C', 9)],
+    'C': [('A', 10), ('B', 9), ('D', 3), ('F', 3), ('L', 1)],
+    'D': [('C', 3), ('I', 2)],
+    'E': [('L', 8)],
+    'F': [('C', 3), ('L', 1)],
+    'G': [('H', 9), ('M', 4)],
+    'H': [('G', 9), ('M', 2), ('N', 7)],
+    'I': [('A', 1), ('D', 2)],
+    'L': [('C', 1), ('F', 1), ('E', 8)],
+    'M': [('G', 4), ('H', 2)],
+    'N': [('H', 7)]
+}
 
-
-
-
+print(dijkstra(dijkstra_graph, 'A', 'E'))
+print(dijkstra(dijkstra_graph, 'G', 'N'))
+print(dijkstra(dijkstra_graph, 'B', 'D'))
+print(dijkstra(dijkstra_graph, 'A', 'C'))
+print(dijkstra(dijkstra_graph, 'F', 'C'))
+print(dijkstra(dijkstra_graph, 'F', 'A'))
+print(dijkstra(dijkstra_graph, 'A', 'H'))
+print(dijkstra(dijkstra_graph, 'B', 'C'))
+print(dijkstra(dijkstra_graph, 'B', 'F'))
+print(dijkstra(dijkstra_graph, 'B', 'E'))

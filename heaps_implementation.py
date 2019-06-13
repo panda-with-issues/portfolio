@@ -54,9 +54,9 @@ class MinHeap:
 
     #add data to dataset and sanitize array heapifying up
     def add(self, data):
-        #check whether data is a numeric data object
-        if type(data) != int and type(data) != float:
-            raise TypeError
+        """#check whether data is a numeric data object
+        if type(data) != int and type(data) != float and type(data) != str:
+            raise TypeError"""
         #insert data
         self.dataset.append(data)
         #if there are more than one piece of data, heapify up

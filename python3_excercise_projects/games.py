@@ -4,18 +4,17 @@ from random import randint, shuffle, randrange
 
 class Games:
 
-    def __init__(self, name, rules, modifier, choices, action):
+    def __init__(self, name, rules, choices, action):
         self.name = name
         self.rules = rules
-        self. modifier = modifier
         self.choices = choices # this is a list of things you can bet on
         self.action = action # this will be printed just to give a friendly ui
 
     def strfy_modifier(self):
-        return "The win is {}x.".format(self.modifier)
+        print("The win is 1x.")
 
     def strfy_choices(self):
-        return "You can choose {}.".format(", ".join(self.choices))
+        print("You can choose {}.".format("or ".join(self.choices)))
 
     def has_won(self, bet, result):
         if bet == result:
@@ -64,10 +63,9 @@ class Battle(Games):
     figures_values = [i for i in range(11, 15)]
     figures_to_value = {figure: value for figure, value in zip(figures, figures_values)}
 
-    def __init__(self, name, rules, modifier, action):
+    def __init__(self, name, rules, action):
         self.name = name
         self.rules = rules
-        self.modifier = modifier
         self.action = action
 
     def draw(self, deck=game_deck):
@@ -92,7 +90,8 @@ class Battle(Games):
         else:
             return False     
 
-class Roulotte:
+
+class Roulette(Games):
 
     table = [
         [0, 0, 0],
@@ -109,6 +108,119 @@ class Roulotte:
         [31, 32, 33],
         [34, 35, 36]
     ]
+
+    # this dict maps every possible roulette's bet with its rules and modifier
+    bet_types_details = {
+        "Plein": ["You can choose only one number!", 35],
+        "Cheval": ["You can choose two adjacent numbers on the table, vertically or horizontally.", 17],
+        "Transversale Plein": ["You can choose a row on the table, or 0 and 2 with either 1 or 3.", 11],
+        "Carré": ["You choose four numbers that share a corner.", 8],
+        "Transversale Simple": ["You bet on two adjacent rows.", 5],
+        "Colonne": ["You choose all numbers in a column.", 2],
+        "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
+        "Rouge": ["You choose all red numbers.", 1],
+        "Noir": ["You choose all black numbers.", 1],
+        "Manque": ["You choose all numbers between 1-18.", 1],
+        "Passe": ["You choose all numbers between 19-36.", 1],
+        "Pair": ["You choose all even numbers.", 1],
+        "Impair": ["You choose all odd numbers.", 1]
+    }
+
+    natural_from_1 = [n for n in range(1, len(bet_types_details)+1)]
+
+    # this dict maps a natural number with a type of bet
+    bets_input_for_user = {n:bet for n, bet in zip(natural_from_1, bet_types_details.keys())}
+
+    def __init__(self, name, rules, action):
+        self.name = name
+        self.rules = rules
+        self.action = action
+
+    def print_table(self):
+        str_table = []
+        separator = ['-' for i in range(16)]
+        str_separator = "".join(separator)
+        for row in self.table:
+            str_row = []
+            if self.table.index(row) == 0:
+                str_row.append('|      0       |')
+            else:
+                for n in row:
+                    if row.index(n) == 0:
+                        str_row.append('|')
+                    if n < 10:
+                        str_row.append(str(n) + '  |')
+                    else:
+                        str_row.append(str(n) + ' |')
+            strfd_row = " ".join(str_row)
+            str_table.append(strfd_row)
+            str_table.append(str_separator)
+        strfd_table = '\n'.join(str_table)
+        print(strfd_table)
+    
+    def strfy_modifier(self, bet_type, bet_types_details=bet_types_details):
+        print("The win is {}x.".format(bet_types_details[bet_type][1]))
+
+    def get_bet_type_and_modifier(self, input_lst=bets_input_for_user, bet_details=bet_types_details, valid_input=natural_from_1):
+        print("Which type of bet do you want to do?\n")
+        for key, value in input_lst.items():
+            print("{}: {}".format(key, value))
+        while True:
+            n_chosen = input("\nEnter the number of the bet you want to do. Type h for help: ").strip().lower()
+            if n_chosen == 'h':
+                for key, details in bet_details.items():
+                    print("\n{}: {}". format(key, details[0]))
+                    self.strfy_modifier(key)
+                    continue
+            else:
+                try:
+                    n_chosen = int(n_chosen)
+                except ValueError:
+                    print("Please enter a number.")
+                    continue
+                if n_chosen not in valid_input:
+                    print("Please enter a number associated with a bet.")
+                    continue
+                else:
+                    chosen_bet = input_lst[n_chosen]
+                    rules, modifier = bet_details[chosen_bet]
+                    print("\nYou chose a {} bet.".format(chosen_bet))
+                    print(rules)
+                    self.strfy_modifier(chosen_bet)
+                    validation = input("Is this right? [y,n] ").strip().lower()
+                    if validation == 'y':
+                        return chosen_bet, modifier
+                    else:
+                        continue
+    
+    def get_bet(self, bet_type):       
+        self.print_table()
+
+        if bet_type == "Plein":
+            bet = input("Choose which number you want to bet on: ")
+            while True:
+                if bet not in range(37):
+                    print("Please choose a number on the roulette's table")
+                    continue
+                return bet
+
+"""
+        "Plein": ["You can choose only one number!", 35],
+        "Cheval": ["You can choose two adjacent numbers on the table, vertically or horizontally.", 17],
+        "Transversale Plein": ["You can choose a row on the table, or 0 and 2 with either 1 or 3.", 11],
+        "Carré": ["You choose four numbers that share a corner.", 8],
+        "Transversale Simple": ["You bet on two adjacent rows.", 5],
+        "Colonne": ["You choose all numbers in a column.", 2],
+        "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
+        "Rouge": ["You choose all red numbers.", 1],
+        "Noir": ["You choose all black numbers.", 1],
+        "Manque": ["You choose all numbers between 1-18.", 1],
+        "Passe": ["You choose all numbers between 19-36.", 1],
+        "Pair": ["You choose all even numbers.", 1],
+        "Impair": ["You choose all odd numbers.", 1]
+"""
+
+            
 
 def greet(game_name):
     print("You chose to play {}!".format(game_name))
@@ -154,8 +266,8 @@ def want_continue():
 def game_routine(game):
     greet(game.name)
     print(game.rules)
-    print(game.strfy_modifier())
-    print(game.strfy_choices())
+    game.strfy_modifier()
+    game.strfy_choices()
 
     while True:
         bet = get_bet(game.choices)
@@ -180,7 +292,7 @@ def game_routine(game):
 def battle_routine(battle):
     greet(battle.name)
     print(battle.rules)
-    print(battle.strfy_modifier())
+    battle.strfy_modifier()
 
     while True:
         money_bet = get_money_bet()
@@ -203,13 +315,15 @@ def battle_routine(battle):
         if not want_continue():
             break
 
-
-
+# roulette is an instance of Roulette
+def roulette_routine(roulette):
+    greet(roulette.name)
+    print(roulette.rules)
+    bet_type = roulette.get_bet_type()
 
 flip_coin = FlipCoin(
     "Flip Coin",
     "You win if you guess which side the coin will land on.",
-    1,
     ['head', 'tail'],
     "\nCoin tossed!\n...\n..."
 )
@@ -217,13 +331,21 @@ flip_coin = FlipCoin(
 cho_han = ChoHan(
     "Cho-Han",
     "You win if you guess whether the sum of two rolled dice is even or odd.",
-    1,
     ['even', 'odd'],
     "\nrolling dice!\n...\n..."
 )
 
 battle = Battle('Battle',
     "You'll draw a random card from a deck and so I will. You win if your card is higher than mine.",
-    1,
     "\nDrawing cards...\n...\n..."
 )
+
+roulette = Roulette(
+    "Roulotte",
+    "You win if the ball stops on one of the numbers you bet on.",
+    "\nRien ne va plus! Ball is spinning...\n...\n..."
+)
+
+bet_type, modifier = roulette.get_bet_type_and_modifier()
+print(bet_type)
+bet = roulette.get_bet(bet_type)

@@ -145,7 +145,6 @@ class Roulette(Games):
         separator = ['-' for i in range(16)]
         if num_row:
             separator.append("    ")
-            print(separator)
             separator[-1], separator[0] = separator[0], separator[-1]
         str_separator = "".join(separator)
         str_table = ['', str_separator] # '' is here to have a blank line before the table's beginning 
@@ -176,7 +175,7 @@ class Roulette(Games):
     def strfy_modifier(self, bet_type, bet_types_details=bet_types_details):
         print("The win is {}x.".format(bet_types_details[bet_type][1]))
 
-    def bet_is_valid(self, bet, table=False, choices=False):
+    def bet_is_valid(self, bet, table=False, choices=False, carré=False):
         try:
             bet = int(bet)    
         except ValueError:
@@ -189,6 +188,9 @@ class Roulette(Games):
             return True
         if choices:
             if bet not in choices:
+                if carré:
+                    print("That number can't be an upper left corner!")
+                    return False
                 print("Please choose a number in the displayed list.")
                 return False
             return True
@@ -199,6 +201,11 @@ class Roulette(Games):
         for row in self.table:
             if number in row:
                 return self.table.index(row)
+
+    def get_num_idx_in_row(self, number):
+        row_idx = self.get_row_idx(number)
+        row = self.table[row_idx]
+        return row.index(number)
 
     def get_bet_type_and_modifier(self, input_lst=bets_input_for_user, bet_details=bet_types_details, valid_input=natural_from_1):
         print("Which type of bet do you want to do?\n")
@@ -248,7 +255,7 @@ class Roulette(Games):
                     first_number = int(first_number)
                     bet_row_idx = self.get_row_idx(first_number)
                     bet_row = self.table[bet_row_idx]
-                    first_number_idx = bet_row.index(first_number)
+                    first_number_idx = self.get_num_idx_in_row(first_number)
                     choices = []
 
                     # add horizontal adjacents
@@ -271,16 +278,52 @@ class Roulette(Games):
                     
                     choices.sort() # because the maximum length of choices is 4, we can afford a runtime of N^2 and use the python built-in bubble sort method
                     second_number = input("Choose a number adjacent to {first}: {choices} ".format(first=first_number, choices=choices)).strip()
-                    if self.bet_is_valid(second_number, choices=choices):
+                    if self.bet_is_valid(second_number, choices):
                         bet = [first_number, int(second_number)]
                         if self.is_sure(bet):
                             return bet
         
         if bet_type == "Transversale Plein":
             self.print_table(num_row=True)
+            choices = [i+1 for i in range(len(self.table))]
+            while True:
+                num_row = input("\nChoose which row you want to bet on: [1-13] ").strip()
+                if self.bet_is_valid(num_row, choices=choices):
+                    num_row = int(num_row)
+                    # zero game
+                    if num_row == 1:
+                        bet = [0, 2]
+                        third_num = input("\nChoose which number will complete the traverse: [1, 3] ").strip()
+                        if self.bet_is_valid(third_num, choices=[1, 3]):
+                            bet.append(int(third_num))
+                            bet.sort()
+                    else:    
+                        bet = self.table[num_row-1]
+                    if self.is_sure(bet):
+                        return bet
 
-"""
-        "Transversale Plein": ["You can choose a row on the table, or 0 and 2 with either 1 or 3.", 11],
+        if bet_type == "Carré":
+            self.print_table()
+            while True:
+                upper_left_corner = input("\nChoose the number that will be the upper left corner of the square: ").strip()
+                choices = [0] + [i for i in range(33) if i % 3 != 0]
+                if self.bet_is_valid(upper_left_corner, choices=choices, carré=True):
+                    upper_left_corner = int(upper_left_corner)
+                    # zero game
+                    if upper_left_corner == 0:
+                        bet = [0] + self.table[1]
+                    else:
+                        bet = [upper_left_corner]
+                        upper_left_corner_row_idx = self.get_row_idx(upper_left_corner)
+                        upper_left_corner_row = self.table[upper_left_corner_row_idx]
+                        upper_left_corner_idx = self.get_num_idx_in_row(upper_left_corner)
+                        bet.append(upper_left_corner_row[upper_left_corner_idx + 1])
+                        next_row = self.table[upper_left_corner_row_idx + 1]
+                        bet.extend(next_row[upper_left_corner_idx:upper_left_corner_idx+2])
+                    if self.is_sure(bet):
+                        return bet
+
+"""                
         "Carré": ["You choose four numbers that share a corner.", 8],
         "Transversale Simple": ["You bet on two adjacent rows.", 5],
         "Colonne": ["You choose all numbers in a column.", 2],

@@ -141,12 +141,22 @@ class Roulette(Games):
         self.rules = rules
         self.action = action
 
-    def print_table(self):
+    def print_table(self, num_row=False):
         separator = ['-' for i in range(16)]
+        if num_row:
+            separator.append("    ")
+            print(separator)
+            separator[-1], separator[0] = separator[0], separator[-1]
         str_separator = "".join(separator)
-        str_table = ['', str_separator]
+        str_table = ['', str_separator] # '' is here to have a blank line before the table's beginning 
         for row in self.table:
             str_row = []
+            if num_row:
+                num = str(self.table.index(row) + 1)
+                if len(num) < 2:
+                    str_row.append(num + ": ")
+                else:
+                    str_row.append(num + ":")
             if self.table.index(row) == 0:
                 str_row.append('|      0       |')
             else:
@@ -166,16 +176,21 @@ class Roulette(Games):
     def strfy_modifier(self, bet_type, bet_types_details=bet_types_details):
         print("The win is {}x.".format(bet_types_details[bet_type][1]))
 
-    def bet_is_valid(self, bet):
+    def bet_is_valid(self, bet, table=False, choices=False):
         try:
             bet = int(bet)    
         except ValueError:
             print("Please insert a number written in digits.")
             return False
-        if int(bet) not in range(37):
-            print("Please choose a number on the roulette's table")
-            return False
-        else:
+        if table:
+            if bet not in range(37):
+                print("Please choose a number on the roulette's table.")
+                return False
+            return True
+        if choices:
+            if bet not in choices:
+                print("Please choose a number in the displayed list.")
+                return False
             return True
 
     # Items are too few to justify a binary search algorithm, and I have to return the row index instead of the number index. In this case there's no valid reason
@@ -216,19 +231,20 @@ class Roulette(Games):
                         return chosen_bet, modifier
         
     def get_bet(self, bet_type):       
-        self.print_table()
 
         if bet_type == "Plein":
+            self.print_table()
             while True:
-                bet = input("\nChoose which number you want to bet on: ")
-                if self.bet_is_valid(bet):
+                bet = input("\nChoose which number you want to bet on: ").strip()
+                if self.bet_is_valid(bet, table=True):
                     if self.is_sure(bet):
                         return bet
 
         if bet_type == 'Cheval':
+            self.print_table()
             while True:
-                first_number = input("\nChoose the first number you want to bet on: ")
-                if self.bet_is_valid(first_number):
+                first_number = input("\nChoose the first number you want to bet on: ").strip()
+                if self.bet_is_valid(first_number, table=True):
                     first_number = int(first_number)
                     bet_row_idx = self.get_row_idx(first_number)
                     bet_row = self.table[bet_row_idx]
@@ -253,10 +269,17 @@ class Roulette(Games):
                             succesive_row = self.table[bet_row_idx + 1]
                             choices.append(succesive_row[first_number_idx])
                     
-                    choices.sort()
-                    print(choices)
+                    choices.sort() # because the maximum length of choices is 4, we can afford a runtime of N^2 and use the python built-in bubble sort method
+                    second_number = input("Choose a number adjacent to {first}: {choices} ".format(first=first_number, choices=choices)).strip()
+                    if self.bet_is_valid(second_number, choices=choices):
+                        bet = [first_number, int(second_number)]
+                        if self.is_sure(bet):
+                            return bet
+        
+        if bet_type == "Transversale Plein":
+            self.print_table(num_row=True)
+
 """
-        "Cheval": ["You can choose two adjacent numbers on the table, vertically or horizontally.", 17],
         "Transversale Plein": ["You can choose a row on the table, or 0 and 2 with either 1 or 3.", 11],
         "Carré": ["You choose four numbers that share a corner.", 8],
         "Transversale Simple": ["You bet on two adjacent rows.", 5],

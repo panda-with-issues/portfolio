@@ -1,7 +1,5 @@
 from random import randint, shuffle, randrange
 
-#Write your game of chance functions here
-
 class Games:
 
     def __init__(self, name, rules, choices, action):
@@ -141,7 +139,10 @@ class Roulette(Games):
         self.rules = rules
         self.action = action
 
-    def print_table(self, num_row=False):
+    # If num_row, table will be printed with its row counted. The first row counted will be [0].
+    # If no_zero, the first row counted will be [1, 2, 3].
+    # Calling the function with no_zero True but num_row False will not produce any rows numeration.
+    def print_table(self, num_row=False, no_zero=False):
         separator = ['-' for i in range(16)]
         if num_row:
             separator.append("    ")
@@ -151,8 +152,13 @@ class Roulette(Games):
         for row in self.table:
             str_row = []
             if num_row:
-                num = str(self.table.index(row) + 1)
-                if len(num) < 2:
+                if no_zero:
+                    num = str(self.table.index(row))
+                else:
+                    num = str(self.table.index(row) + 1)
+                if num == '0':
+                    str_row.append("   ")
+                elif len(num) < 2:
                     str_row.append(num + ": ")
                 else:
                     str_row.append(num + ":")
@@ -323,8 +329,12 @@ class Roulette(Games):
                     if self.is_sure(bet):
                         return bet
 
+        if bet_type == "Transversale Simple":
+            self.print_table(num_row=True, no_zero=True)
+            while True:
+                first_row
+
 """                
-        "Carré": ["You choose four numbers that share a corner.", 8],
         "Transversale Simple": ["You bet on two adjacent rows.", 5],
         "Colonne": ["You choose all numbers in a column.", 2],
         "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
@@ -440,7 +450,9 @@ def battle_routine(battle):
 def roulette_routine(roulette):
     greet(roulette.name)
     print(roulette.rules)
-    bet_type, modifier = roulette.get_bet_type_and_modifier()
+
+    while True:
+        bet_type, modifier = roulette.get_bet_type_and_modifier()
 
 flip_coin = FlipCoin(
     "Flip Coin",
@@ -467,5 +479,7 @@ roulette = Roulette(
     "\nRien ne va plus! Ball is spinning...\n...\n..."
 )
 
-bet_type, modifier = roulette.get_bet_type_and_modifier()
-bet = roulette.get_bet(bet_type)
+"""bet_type, modifier = roulette.get_bet_type_and_modifier()
+bet = roulette.get_bet(bet_type)"""
+
+roulette.print_table(num_row=True, no_zero=True)

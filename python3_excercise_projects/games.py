@@ -22,7 +22,12 @@ class Games:
             return True    
         print("Sashé, you lose...")
         return False
-
+    
+    def is_sure(self, bet):
+        check_out = input("Are you really sure you want to bet on {}? [y/n] ".format(bet)).strip().lower()
+        if check_out == 'y':
+            return True
+        return False       
 
 class FlipCoin(Games):
 
@@ -137,9 +142,9 @@ class Roulette(Games):
         self.action = action
 
     def print_table(self):
-        str_table = []
         separator = ['-' for i in range(16)]
         str_separator = "".join(separator)
+        str_table = ['', str_separator]
         for row in self.table:
             str_row = []
             if self.table.index(row) == 0:
@@ -160,6 +165,25 @@ class Roulette(Games):
     
     def strfy_modifier(self, bet_type, bet_types_details=bet_types_details):
         print("The win is {}x.".format(bet_types_details[bet_type][1]))
+
+    def bet_is_valid(self, bet):
+        try:
+            bet = int(bet)    
+        except ValueError:
+            print("Please insert a number written in digits.")
+            return False
+        if int(bet) not in range(37):
+            print("Please choose a number on the roulette's table")
+            return False
+        else:
+            return True
+
+    # Items are too few to justify a binary search algorithm, and I have to return the row index instead of the number index. In this case there's no valid reason
+    # to worry about a N runtime (N=13), so the search algorithm will be linear.
+    def get_row_idx(self, number):
+        for row in self.table:
+            if number in row:
+                return self.table.index(row)
 
     def get_bet_type_and_modifier(self, input_lst=bets_input_for_user, bet_details=bet_types_details, valid_input=natural_from_1):
         print("Which type of bet do you want to do?\n")
@@ -187,25 +211,51 @@ class Roulette(Games):
                     print("\nYou chose a {} bet.".format(chosen_bet))
                     print(rules)
                     self.strfy_modifier(chosen_bet)
-                    validation = input("Is this right? [y,n] ").strip().lower()
+                    validation = input("Is this right? [y/n] ").strip().lower()
                     if validation == 'y':
                         return chosen_bet, modifier
-                    else:
-                        continue
-    
+        
     def get_bet(self, bet_type):       
         self.print_table()
 
         if bet_type == "Plein":
-            bet = input("Choose which number you want to bet on: ")
             while True:
-                if bet not in range(37):
-                    print("Please choose a number on the roulette's table")
-                    continue
-                return bet
+                bet = input("\nChoose which number you want to bet on: ")
+                if self.bet_is_valid(bet):
+                    if self.is_sure(bet):
+                        return bet
 
+        if bet_type == 'Cheval':
+            while True:
+                first_number = input("\nChoose the first number you want to bet on: ")
+                if self.bet_is_valid(first_number):
+                    first_number = int(first_number)
+                    bet_row_idx = self.get_row_idx(first_number)
+                    bet_row = self.table[bet_row_idx]
+                    first_number_idx = bet_row.index(first_number)
+                    choices = []
+
+                    # add horizontal adjacents
+                    if first_number == 0:
+                        choices.extend(self.table[1])
+                    else:
+                        if first_number_idx - 1 >= 0: 
+                            choices.append(bet_row[first_number_idx-1])
+                        if first_number_idx + 1 < 3:
+                            choices.append(bet_row[first_number_idx+1])
+
+                    # add vertical adjacents
+                    if first_number != 0: # this to prevent a double 1 in choices
+                        if bet_row_idx > 0:
+                            precedent_row = self.table[bet_row_idx - 1]
+                            choices.append(precedent_row[first_number_idx])
+                        if bet_row_idx < len(self.table)-1:
+                            succesive_row = self.table[bet_row_idx + 1]
+                            choices.append(succesive_row[first_number_idx])
+                    
+                    choices.sort()
+                    print(choices)
 """
-        "Plein": ["You can choose only one number!", 35],
         "Cheval": ["You can choose two adjacent numbers on the table, vertically or horizontally.", 17],
         "Transversale Plein": ["You can choose a row on the table, or 0 and 2 with either 1 or 3.", 11],
         "Carré": ["You choose four numbers that share a corner.", 8],
@@ -243,12 +293,18 @@ def get_money_bet():
         else:
             return money_bet
 
-# choices is a list type object
-def get_bet(choices):
+########################
+# THIS MUST BE DEBUGGED
+####################### 
+# game is a subGames object
+def get_bet(game):
     while True:
         bet = input("What will you bet on? ").strip().lower()
-        if bet in choices:
-            return bet
+        if bet in game.choices:
+            if game.is_sure(bet):
+                return bet
+        else:
+            print("Please enter a valid bet")
 
 def want_continue():
     valid_input = ['y', 'n']
@@ -272,18 +328,17 @@ def game_routine(game):
     while True:
         bet = get_bet(game.choices)
         money_bet = get_money_bet()
-        stakes = money_bet * game.modifier
         
         print(game.action)
         result = game.get_result()
 
         global money
         if game.has_won(bet, result):
-            print("You win {} coins.".format(stakes))
-            money += stakes
+            print("You win {} coins.".format(money_bet))
+            money += money_bet
         else:
-            print("You lose {} coins.".format(stakes))
-            money -= stakes
+            print("You lose {} coins.".format(money_bet))
+            money -= money_bet
 
         if not want_continue():
             break
@@ -319,7 +374,7 @@ def battle_routine(battle):
 def roulette_routine(roulette):
     greet(roulette.name)
     print(roulette.rules)
-    bet_type = roulette.get_bet_type()
+    bet_type, modifier = roulette.get_bet_type_and_modifier()
 
 flip_coin = FlipCoin(
     "Flip Coin",
@@ -347,5 +402,4 @@ roulette = Roulette(
 )
 
 bet_type, modifier = roulette.get_bet_type_and_modifier()
-print(bet_type)
 bet = roulette.get_bet(bet_type)

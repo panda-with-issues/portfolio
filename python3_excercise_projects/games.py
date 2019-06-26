@@ -143,12 +143,19 @@ class Roulette(Games):
     # Call no_zero to make the numeration start at the [1, 2, 3] row.
     # Calling the function with no_zero True but num_row False will not produce any rows numeration.
     # Call with num_col to have the columns numerated at the bottom of the table
-    def print_table(self, num_row=False, no_zero=False, num_col=False):
+    # Call with num_dozen to have dozens numerated
+    def print_table(self, num_row=False, no_zero=False, num_col=False, num_dozen=False):
         separator = ['-' for i in range(16)]
-        # make separator longer in case of rows numeration, in order to line up with row nums
-        if num_row:
+        # make separator longer in case of rows numeration or dozen numeration, in order to line up with vertical bars
+        if num_row or num_dozen:
             separator.append("    ")
             separator[-1], separator[0] = separator[0], separator[-1]
+        
+        # make a longer separator to limit dozens
+        if num_dozen:
+            dozens_separator = ['-' for i in range(20)]
+            strfd_dozens_separator = "".join(dozens_separator)
+            counters = ['3rd', '2nd', '1st']
         
         str_separator = "".join(separator)
         str_table = ['', str_separator] # '' is here to have a blank line before the table's beginning 
@@ -168,6 +175,14 @@ class Roulette(Games):
                 else:
                     str_row.append(num + ":")
 
+            # logic to have dozen numbered
+            if num_dozen:
+                if (self.table.index(row) + 2) % 4 == 0: # print number at rows with indices 2, 6, 10
+                    counter = counters.pop()
+                    str_row.append(counter)
+                else:
+                    str_row.append("   ")
+
             if self.table.index(row) == 0:
                 str_row.append('|      0       |')
             else:
@@ -180,7 +195,13 @@ class Roulette(Games):
                         str_row.append(str(n) + ' |')
             strfd_row = " ".join(str_row)
             str_table.append(strfd_row)
-            str_table.append(str_separator)
+            
+            # mark dozens limits
+            if num_dozen and self.table.index(row) % 4 == 0:
+                str_table.append(strfd_dozens_separator)
+            else:
+
+                str_table.append(str_separator)
         
         # logic to have columns counted
         if num_col:
@@ -350,7 +371,7 @@ class Roulette(Games):
             self.print_table(num_row=True, no_zero=True)
             while True:
                 first_row_idx = input("\nChoose the first traverse you want to bet on: [1-12] ").strip()
-                choices = [i for i in range(len(roulette.table)) if i != 0]
+                choices = [i for i in range(1, len(roulette.table))]
                 if self.bet_is_valid(first_row_idx, choices=choices):
                     first_row_idx = int(first_row_idx)
                     adjacents_rows_ids = []
@@ -374,17 +395,23 @@ class Roulette(Games):
             self.print_table(num_col=True)
             while True:
                 col_idx = input("\nChoose which column you want to bet on: [1-3] ").strip()
-                choices = [1, 2, 3]
-                if self.bet_is_valid(col_idx, choices=choices):
+                if self.bet_is_valid(col_idx, choices=[1, 2, 3]):
                     col_idx = int(col_idx) - 1
                     bet = [row[col_idx] for row in self.table if row[col_idx] != 0]
                     if self.is_sure(bet):
                         return bet
 
-                    
+        if bet_type == "Douzaine":
+            self.print_table(num_dozen=True)
+            while True:
+                num_dozen = input("\nChoose which dozen you want to bet on: [1-3] ")
+                if self.bet_is_valid(num_dozen, choices=[1, 2, 3]):
+                    dozen_coefficient = int(num_dozen) - 1
+                    bet = [num + 12 * dozen_coefficient for num in range(1, 13)]
+                    if self.is_sure(bet):
+                        return bet
 
 """                
-        "Colonne": ["You choose all numbers in a column.", 2],
         "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
         "Rouge": ["You choose all red numbers.", 1],
         "Noir": ["You choose all black numbers.", 1],

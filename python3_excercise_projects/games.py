@@ -139,18 +139,23 @@ class Roulette(Games):
         self.rules = rules
         self.action = action
 
-    # If num_row, table will be printed with its row counted. The first row counted will be [0].
-    # If no_zero, the first row counted will be [1, 2, 3].
+    # Call with num_row, to get table printed with row counted. The first row counted will be [0].
+    # Call no_zero to make the numeration start at the [1, 2, 3] row.
     # Calling the function with no_zero True but num_row False will not produce any rows numeration.
-    def print_table(self, num_row=False, no_zero=False):
+    # Call with num_col to have the columns numerated at the bottom of the table
+    def print_table(self, num_row=False, no_zero=False, num_col=False):
         separator = ['-' for i in range(16)]
+        # make separator longer in case of rows numeration, in order to line up with row nums
         if num_row:
             separator.append("    ")
             separator[-1], separator[0] = separator[0], separator[-1]
+        
         str_separator = "".join(separator)
         str_table = ['', str_separator] # '' is here to have a blank line before the table's beginning 
         for row in self.table:
             str_row = []
+
+            # logic to have rows counted
             if num_row:
                 if no_zero:
                     num = str(self.table.index(row))
@@ -162,6 +167,7 @@ class Roulette(Games):
                     str_row.append(num + ": ")
                 else:
                     str_row.append(num + ":")
+
             if self.table.index(row) == 0:
                 str_row.append('|      0       |')
             else:
@@ -175,6 +181,15 @@ class Roulette(Games):
             strfd_row = " ".join(str_row)
             str_table.append(strfd_row)
             str_table.append(str_separator)
+        
+        # logic to have columns counted
+        if num_col:
+            numeration_row = []
+            for i in range(1, 4):
+                numeration_row.append("  {}  ".format(i))
+            strfd_numeration_row = "".join(numeration_row)
+            str_table.append(strfd_numeration_row)
+
         strfd_table = '\n'.join(str_table)
         print(strfd_table)
     
@@ -303,6 +318,8 @@ class Roulette(Games):
                         if self.bet_is_valid(third_num, choices=[1, 3]):
                             bet.append(int(third_num))
                             bet.sort()
+                        else:
+                            continue
                     else:    
                         bet = self.table[num_row-1]
                     if self.is_sure(bet):
@@ -332,10 +349,41 @@ class Roulette(Games):
         if bet_type == "Transversale Simple":
             self.print_table(num_row=True, no_zero=True)
             while True:
-                first_row
+                first_row_idx = input("\nChoose the first traverse you want to bet on: [1-12] ").strip()
+                choices = [i for i in range(len(roulette.table)) if i != 0]
+                if self.bet_is_valid(first_row_idx, choices=choices):
+                    first_row_idx = int(first_row_idx)
+                    adjacents_rows_ids = []
+                    if first_row_idx > 1:
+                        adjacents_rows_ids.append(first_row_idx - 1)
+                    if first_row_idx < 12:
+                        adjacents_rows_ids.append(first_row_idx + 1)
+                    if len(adjacents_rows_ids) == 1:
+                        bet = self.table[first_row_idx] + self.table[adjacents_rows_ids[0]]
+                    else:                        
+                        adjacent_row_idx = input("\nChoose which adjacent traverse will complete your bet: {} ".format(adjacents_rows_ids)).strip()
+                        if self.bet_is_valid(adjacent_row_idx, choices=adjacents_rows_ids):
+                            bet = self.table[first_row_idx] + self.table[int(adjacent_row_idx)]
+                        else:
+                            continue
+                    bet.sort()
+                    if self.is_sure(bet):
+                        return bet
+
+        if bet_type == "Colonne":
+            self.print_table(num_col=True)
+            while True:
+                col_idx = input("\nChoose which column you want to bet on: [1-3] ").strip()
+                choices = [1, 2, 3]
+                if self.bet_is_valid(col_idx, choices=choices):
+                    col_idx = int(col_idx) - 1
+                    bet = [row[col_idx] for row in self.table if row[col_idx] != 0]
+                    if self.is_sure(bet):
+                        return bet
+
+                    
 
 """                
-        "Transversale Simple": ["You bet on two adjacent rows.", 5],
         "Colonne": ["You choose all numbers in a column.", 2],
         "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
         "Rouge": ["You choose all red numbers.", 1],
@@ -479,7 +527,5 @@ roulette = Roulette(
     "\nRien ne va plus! Ball is spinning...\n...\n..."
 )
 
-"""bet_type, modifier = roulette.get_bet_type_and_modifier()
-bet = roulette.get_bet(bet_type)"""
-
-roulette.print_table(num_row=True, no_zero=True)
+bet_type, modifier = roulette.get_bet_type_and_modifier()
+bet = roulette.get_bet(bet_type)

@@ -66,15 +66,9 @@ class Battle(Games):
     figures_values = [i for i in range(11, 15)]
     figures_to_value = {figure: value for figure, value in zip(figures, figures_values)}
 
-    def __init__(self, name, rules, action):
-        self.name = name
-        self.rules = rules
-        self.action = action
-
     def draw(self, deck=game_deck):
         deck_copy = deck.copy()
         shuffle(deck_copy)
-        print(self.action)
         your_card = deck_copy.pop(randrange(0, len(deck_copy)))
         my_card = deck_copy.pop(randrange(0, len(deck_copy)))
         print("You drew {}.".format(your_card))
@@ -87,10 +81,13 @@ class Battle(Games):
         if type(my_card) is str:
             my_card = figures_to_value[my_card]
         if your_card > my_card:
+            print("Chanté, you win!")
             return True
         elif your_card == my_card:
+            print("Oh my, it's a tie!")
             return
         else:
+            print("Sashé, you lose...")            
             return False     
 
 
@@ -160,11 +157,6 @@ class Roulette(Games):
     natural_from_1 = [n for n in range(1, len(bet_types_details)+1)]
     # this dict maps a natural number with a type of bet
     bets_input_for_user = {n:bet for n, bet in zip(natural_from_1, bet_types_details.keys())}
-
-    def __init__(self, name, rules, action):
-        self.name = name
-        self.rules = rules
-        self.action = action
 
     # Call with num_row, to get table printed with row counted. The first row counted will be [0].
     # Call no_zero to make the numeration start at the [1, 2, 3] row.
@@ -303,7 +295,7 @@ class Roulette(Games):
                     print("\nYou chose a {} bet.".format(chosen_bet))
                     print(rules)
                     self.strfy_modifier(chosen_bet)
-                    validation = input("Is this right? [y/n] ").strip().lower()
+                    validation = input("Is this ok? [y/n] ").strip().lower()
                     if validation == 'y':
                         return chosen_bet, modifier
         
@@ -315,7 +307,9 @@ class Roulette(Games):
                 bet = input("\nChoose which number you want to bet on: ").strip()
                 if self.bet_is_valid(bet, table=True):
                     if self.is_sure(bet):
-                        return bet
+                        # because every ther type of bet is a list type object and because the has_won() method works with the "in" operator, even this single bet
+                        # must be turned in a list
+                        return [int(bet)]
 
         if bet_type == 'Cheval':
             self.print_table()
@@ -399,7 +393,7 @@ class Roulette(Games):
             self.print_table(num_row=True, no_zero=True)
             while True:
                 first_row_idx = input("\nChoose the first traverse you want to bet on: [1-12] ").strip()
-                choices = [i for i in range(1, len(roulette.table))]
+                choices = [i for i in range(1, len(self.table))]
                 if self.bet_is_valid(first_row_idx, choices=choices):
                     first_row_idx = int(first_row_idx)
                     adjacents_rows_ids = []
@@ -446,141 +440,18 @@ class Roulette(Games):
                 list = ', '.join([str(num) for num in bet])
                 ))
             return bet
-            
 
-            
+    def get_result(self):
+        result = randint(0, 36)
+        print("...the ball stops in {num}, {color}!\n".format(
+            num = result,
+            color = "red" if result in self.red_nums else "black" 
+        ))
+        return result
 
-def greet(game_name):
-    print("You chose to play {}!".format(game_name))
-  
-def get_money_bet():
-    print("You have {} coins.".format(money))
-    while True:
-        money_bet = input("How many moneys do you want to bet? ").strip()
-        try:
-            money_bet = int(money_bet)
-        except ValueError:
-            print("Write in digint the amount of money you want to bet\n")
-            continue
-        if money_bet <= 0:
-            print("You must bet at least 1 coin!\n")
-            continue
-        if money_bet > money:
-            print("You don't have enough money!\n")
-            continue
-        else:
-            return money_bet
-
-########################
-# THIS MUST BE DEBUGGED
-####################### 
-# game is a subGames object
-def get_bet(game):
-    while True:
-        bet = input("What will you bet on? ").strip().lower()
-        if bet in game.choices:
-            if game.is_sure(bet):
-                return bet
-        else:
-            print("Please enter a valid bet")
-
-def want_continue():
-    valid_input = ['y', 'n']
-    while True:
-        choice = input("Do you want to give it another try? [y/n] ").strip().lower()
-        if choice not in valid_input:
-            print("Please digit 'y' for yes or 'n' for no.")
-            continue
-        if choice == 'y':
-            return True
-        if choice == 'n':
-            return False
-
-# game is a subGames object
-def game_routine(game):
-    greet(game.name)
-    print(game.rules)
-    game.strfy_modifier()
-    game.strfy_choices()
-
-    while True:
-        bet = get_bet(game.choices)
-        money_bet = get_money_bet()
-        
-        print(game.action)
-        result = game.get_result()
-
-        global money
-        if game.has_won(bet, result):
-            print("You win {} coins.".format(money_bet))
-            money += money_bet
-        else:
-            print("You lose {} coins.".format(money_bet))
-            money -= money_bet
-
-        if not want_continue():
-            break
-
-# battle is an instance of Battle
-def battle_routine(battle):
-    greet(battle.name)
-    print(battle.rules)
-    battle.strfy_modifier()
-
-    while True:
-        money_bet = get_money_bet()
-
-        your_card, my_card = battle.draw()
-
-        global money
-        if battle.has_won(your_card, my_card):
+    def has_won(self, bet, result):
+        if result in bet:
             print("Chanté, you win!")
-            print("You win {} coins.".format(money_bet))
-            money += money_bet
-        elif battle.has_won(your_card, my_card) is None:
-            print("Oh my, it's a tie!")
-            print("No coins won nor lost.")
-        else:
-            print("Sashé, you lose...")
-            print("You lose {} coins.".format(money_bet))
-            money -= money_bet
-
-        if not want_continue():
-            break
-
-# roulette is an instance of Roulette
-def roulette_routine(roulette):
-    greet(roulette.name)
-    print(roulette.rules)
-
-    while True:
-        bet_type, modifier = roulette.get_bet_type_and_modifier()
-
-flip_coin = FlipCoin(
-    "Flip Coin",
-    "You win if you guess which side the coin will land on.",
-    ['head', 'tail'],
-    "\nCoin tossed!\n...\n..."
-)
-
-cho_han = ChoHan(
-    "Cho-Han",
-    "You win if you guess whether the sum of two rolled dice is even or odd.",
-    ['even', 'odd'],
-    "\nrolling dice!\n...\n..."
-)
-
-battle = Battle('Battle',
-    "You'll draw a random card from a deck and so I will. You win if your card is higher than mine.",
-    "\nDrawing cards...\n...\n..."
-)
-
-roulette = Roulette(
-    "Roulotte",
-    "You win if the ball stops on one of the numbers you bet on.",
-    "\nRien ne va plus! Ball is spinning...\n...\n..."
-)
-
-bet_type, modifier = roulette.get_bet_type_and_modifier()
-bet = roulette.get_bet(bet_type)
-print(bet)
+            return True    
+        print("Sashé, you lose...")
+        return False

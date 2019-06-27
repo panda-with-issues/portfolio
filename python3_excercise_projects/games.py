@@ -96,7 +96,17 @@ class Battle(Games):
 
 class Roulette(Games):
 
-    table = [
+    # build table layout as a matrix 3x13
+    table = [[0, 0, 0]]
+    table_row = []
+    for num in range(1, 37):
+        table_row.append(num)
+        if len(table_row) == 3:
+            table.append(table_row)
+            table_row = []
+        
+
+    """    table = [
         [0, 0, 0],
         [1, 2, 3],
         [4, 5, 6],
@@ -110,7 +120,7 @@ class Roulette(Games):
         [28, 29, 30],
         [31, 32, 33],
         [34, 35, 36]
-    ]
+    """
 
     # this dict maps every possible roulette's bet with its rules and modifier
     bet_types_details = {
@@ -128,6 +138,7 @@ class Roulette(Games):
         "Pair": ["You choose all even numbers.", 1],
         "Impair": ["You choose all odd numbers.", 1]
     }
+
 
     natural_from_1 = [n for n in range(1, len(bet_types_details)+1)]
 
@@ -412,7 +423,6 @@ class Roulette(Games):
                         return bet
 
 """                
-        "Douzaine": ["You can choose all numbers in the first 4 rows, or from the 5th to the 8th, or in the last 4 rows.", 2],
         "Rouge": ["You choose all red numbers.", 1],
         "Noir": ["You choose all black numbers.", 1],
         "Manque": ["You choose all numbers between 1-18.", 1],
@@ -554,5 +564,7 @@ roulette = Roulette(
     "\nRien ne va plus! Ball is spinning...\n...\n..."
 )
 
-bet_type, modifier = roulette.get_bet_type_and_modifier()
-bet = roulette.get_bet(bet_type)
+"""bet_type, modifier = roulette.get_bet_type_and_modifier()
+bet = roulette.get_bet(bet_type)"""
+
+print(roulette.table)

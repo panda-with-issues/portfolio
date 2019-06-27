@@ -104,23 +104,30 @@ class Roulette(Games):
         if len(table_row) == 3:
             table.append(table_row)
             table_row = []
-        
 
-    """    table = [
-        [0, 0, 0],
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-        [10, 11, 12],
-        [13, 14, 15],
-        [16, 17, 18],
-        [19, 20, 21],
-        [22, 23, 24],
-        [25, 26, 27],
-        [28, 29, 30],
-        [31, 32, 33],
-        [34, 35, 36]
-    """
+    red_nums = []
+    i = 0
+    for num in range(1, 37):
+        print(num)
+        if i < 5 and num % 2 == 1:
+            print("case 1")
+            red_nums.append(num)
+            i += 1
+            print("i = {}".format(i))
+        elif i == 5 and num == red_nums[-1] + 3:
+            print("case 2")
+            red_nums.append(num)
+            i += 1
+            print("i = {}".format(i))
+        elif 5 < i <= 9 and num % 2 == 0:
+            print("case 3")
+            red_nums.append(num)
+            i += 1
+            print("i = {}".format(i))
+        if i == 9:
+            print("reset")
+            i = 0
+            print("i = {}".format(i))
 
     # this dict maps every possible roulette's bet with its rules and modifier
     bet_types_details = {
@@ -567,4 +574,4 @@ roulette = Roulette(
 """bet_type, modifier = roulette.get_bet_type_and_modifier()
 bet = roulette.get_bet(bet_type)"""
 
-print(roulette.table)
+print(roulette.red_nums)

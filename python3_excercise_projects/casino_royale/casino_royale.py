@@ -1,10 +1,7 @@
 from casino_classes import FlipCoin, ChoHan, Battle, Roulette
-
-def greet(game_name):
-    print("You chose to play {}!".format(game_name))
   
 def get_money_bet():
-    print("You have {} coins.".format(money))
+    print("\nYou have {} coins.".format(money))
     while True:
         money_bet = input("How many coins do you want to bet? ").strip()
         try:
@@ -21,13 +18,10 @@ def get_money_bet():
         else:
             return money_bet
 
-########################
-# THIS MUST BE DEBUGGED
-####################### 
 # game is a subGames object
 def get_bet(game):
     while True:
-        bet = input("What will you bet on? ").strip().lower()
+        bet = input("\nWhat will you bet on? ").strip().lower()
         if bet in game.choices:
             if game.is_sure(bet):
                 return bet
@@ -37,7 +31,7 @@ def get_bet(game):
 def want_continue():
     valid_input = ['y', 'n']
     while True:
-        choice = input("Do you want to give it another try? [y/n] ").strip().lower()
+        choice = input("\nDo you want to give it another try? [y/n] ").strip().lower()
         if choice not in valid_input:
             print("Please digit 'y' for yes or 'n' for no.")
             continue
@@ -50,7 +44,7 @@ def want_continue():
 def game_routine(game):
 
     # welcome routine
-    greet(game.name)
+    print("You chose to play {}!".format(game.name))
     print(game.rules)
     if type(game) != Roulette:
         game.strfy_modifier()
@@ -61,7 +55,7 @@ def game_routine(game):
     while True:
         modifier = 1
         if game.choices:
-            bet = get_bet(game.choices)
+            bet = get_bet(game)
         if type(game) == Roulette:
             bet_type, modifier = game.get_bet_type_and_modifier()
             bet = game.get_bet(bet_type)
@@ -75,6 +69,7 @@ def game_routine(game):
         print(game.action)
         if type(game) == Battle:
             your_card, my_card = game.draw()
+            result = game.get_result(your_card, my_card)
         else:
             result = game.get_result()
 
@@ -87,11 +82,11 @@ def game_routine(game):
                 print("You lose {} coins.".format(money_bet))
                 money -= money_bet
         else:
-            if game.has_won(your_card, my_card):
+            if result == "tie":
+                print("No coins won nor lost.")
+            elif result == "win":
                 print("You win {} coins.".format(stakes))
                 money += stakes
-            elif game.has_won(your_card, my_card) is None:
-                print("No coins won nor lost.")
             else:
                 print("You lose {} coins.".format(stakes))
                 money -= money_bet            
@@ -160,4 +155,4 @@ roulette = Roulette(
 )
 
 money = 100
-game_routine(roulette)
+game_routine(battle)

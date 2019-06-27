@@ -12,7 +12,7 @@ class Games:
         print("The win is 1x.")
 
     def strfy_choices(self):
-        print("You can choose {}.".format("or ".join(self.choices)))
+        print("\nYou can choose {}.".format(" or ".join(self.choices)))
 
     def has_won(self, bet, result):
         if bet == result:
@@ -22,7 +22,7 @@ class Games:
         return False
     
     def is_sure(self, bet):
-        check_out = input("Are you really sure you want to bet on {}? [y/n] ".format(bet)).strip().lower()
+        check_out = input("\nAre you really sure you want to bet on {}? [y/n] ".format(bet)).strip().lower()
         if check_out == 'y':
             return True
         return False       
@@ -75,20 +75,20 @@ class Battle(Games):
         print("I drew {}.\n".format(my_card))
         return your_card, my_card
 
-    def has_won(self, your_card, my_card, figures_to_value=figures_to_value):
+    def get_result(self, your_card, my_card, figures_to_value=figures_to_value):
         if type(your_card) is str:
             your_card = figures_to_value[your_card]
         if type(my_card) is str:
             my_card = figures_to_value[my_card]
         if your_card > my_card:
             print("Chanté, you win!")
-            return True
+            return "win"
         elif your_card == my_card:
             print("Oh my, it's a tie!")
-            return
+            return "tie"
         else:
             print("Sashé, you lose...")            
-            return False     
+            return "loss"     
 
 
 class Roulette(Games):

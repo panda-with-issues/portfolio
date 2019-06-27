@@ -105,29 +105,30 @@ class Roulette(Games):
             table.append(table_row)
             table_row = []
 
+    # build the list of red numbers: the first 5 odd numbers, then skip 2, then the next 4 even numbers and repeat
     red_nums = []
     i = 0
     for num in range(1, 37):
-        print(num)
         if i < 5 and num % 2 == 1:
-            print("case 1")
             red_nums.append(num)
             i += 1
-            print("i = {}".format(i))
         elif i == 5 and num == red_nums[-1] + 3:
-            print("case 2")
             red_nums.append(num)
             i += 1
-            print("i = {}".format(i))
         elif 5 < i <= 9 and num % 2 == 0:
-            print("case 3")
             red_nums.append(num)
             i += 1
-            print("i = {}".format(i))
         if i == 9:
-            print("reset")
             i = 0
-            print("i = {}".format(i))
+
+    # build the list of black numbers. This can't be easily done with a comprehension with conditional filter ([num if num not in red_rums]) because of the wierd
+    # scope of comprehension, which can't access external variables unless it is only one and is the outermost iterator.
+    # Hence I will use a longer but plain loop to afford the same task (another work-around would be declaring the comprehension as instance variable in the constructor,
+    # because doing this the comprehension will widen its scope to the __init__'s scope, that is the whole class)
+    black_nums = []
+    for num in range(1, 37):
+        if num not in red_nums:
+            black_nums.append(num)
 
     # this dict maps every possible roulette's bet with its rules and modifier
     bet_types_details = {
@@ -146,9 +147,17 @@ class Roulette(Games):
         "Impair": ["You choose all odd numbers.", 1]
     }
 
+    # map the name of every chance simple with its bet and word to be printed in formatted string
+    chances_simples = {
+        "Rouge": [red_nums, "red"],
+        "Noir": [black_nums, "black"],
+        "Manque": [[num for num in range(1, 19)], "low"],
+        "Passe": [[num for num in range(19, 37)], "high"],
+        "Pair": [[num for num in range(1, 37) if num % 2 == 0], "even"],
+        "Impair": [[num for num in range(1, 37) if num % 2 == 1], "odd"]
+    }
 
     natural_from_1 = [n for n in range(1, len(bet_types_details)+1)]
-
     # this dict maps a natural number with a type of bet
     bets_input_for_user = {n:bet for n, bet in zip(natural_from_1, bet_types_details.keys())}
 
@@ -164,6 +173,7 @@ class Roulette(Games):
     # Call with num_dozen to have dozens numerated
     def print_table(self, num_row=False, no_zero=False, num_col=False, num_dozen=False):
         separator = ['-' for i in range(16)]
+
         # make separator longer in case of rows numeration or dozen numeration, in order to line up with vertical bars
         if num_row or num_dozen:
             separator.append("    ")
@@ -253,7 +263,7 @@ class Roulette(Games):
                     return False
                 print("Please choose a number in the displayed list.")
                 return False
-            return True
+            return True       
 
     # Items are too few to justify a binary search algorithm, and I have to return the row index instead of the number index. In this case there's no valid reason
     # to worry about a N runtime (N=13), so the search algorithm will be linear.
@@ -297,7 +307,7 @@ class Roulette(Games):
                     if validation == 'y':
                         return chosen_bet, modifier
         
-    def get_bet(self, bet_type):       
+    def get_bet(self, bet_type, chances_simples=chances_simples):       
 
         if bet_type == "Plein":
             self.print_table()
@@ -429,14 +439,14 @@ class Roulette(Games):
                     if self.is_sure(bet):
                         return bet
 
-"""                
-        "Rouge": ["You choose all red numbers.", 1],
-        "Noir": ["You choose all black numbers.", 1],
-        "Manque": ["You choose all numbers between 1-18.", 1],
-        "Passe": ["You choose all numbers between 19-36.", 1],
-        "Pair": ["You choose all even numbers.", 1],
-        "Impair": ["You choose all odd numbers.", 1]
-"""
+        if bet_type in chances_simples:
+            bet = chances_simples[bet_type][0]
+            print("\nYou have bet on every {chance} number ({list}).".format(
+                chance = chances_simples[bet_type][1],
+                list = ', '.join([str(num) for num in bet])
+                ))
+            return bet
+            
 
             
 
@@ -571,7 +581,6 @@ roulette = Roulette(
     "\nRien ne va plus! Ball is spinning...\n...\n..."
 )
 
-"""bet_type, modifier = roulette.get_bet_type_and_modifier()
-bet = roulette.get_bet(bet_type)"""
-
-print(roulette.red_nums)
+bet_type, modifier = roulette.get_bet_type_and_modifier()
+bet = roulette.get_bet(bet_type)
+print(bet)

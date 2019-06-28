@@ -44,7 +44,7 @@ def want_continue():
 def game_routine(game):
 
     # welcome routine
-    print("You chose to play {}!".format(game.name))
+    print("\n\nYou chose to play {}!".format(game.name))
     print(game.rules)
     if type(game) != Roulette:
         game.strfy_modifier()
@@ -59,7 +59,6 @@ def game_routine(game):
         if type(game) == Roulette:
             bet_type, modifier = game.get_bet_type_and_modifier()
             bet = game.get_bet(bet_type)
-            print(bet)
         
         #ask how many money user want to bet
         money_bet = get_money_bet()
@@ -89,42 +88,13 @@ def game_routine(game):
                 money += stakes
             else:
                 print("You lose {} coins.".format(stakes))
-                money -= money_bet            
+                money -= money_bet
+        
+        if money == 0:
+            break            
 
         if not want_continue():
             break
-
-"""# battle is an instance of Battle
-def battle_routine(battle):
-    greet(battle.name)
-    print(battle.rules)
-    battle.strfy_modifier()
-
-    while True:
-        money_bet = get_money_bet()
-
-        your_card, my_card = battle.draw()
-
-        global money
-        if battle.has_won(your_card, my_card):
-            print("You win {} coins.".format(money_bet))
-            money += money_bet
-        elif battle.has_won(your_card, my_card) is None:
-            print("No coins won nor lost.")
-        else:
-            print("You lose {} coins.".format(money_bet))
-            money -= money_bet
-
-        if not want_continue():
-            break
-
-# roulette is an instance of Roulette
-def roulette_routine(roulette):
-    greet(roulette.name)
-    print(roulette.rules)
-
-    while True:
-        bet_type, modifier = roulette.get_bet_type_and_modifier()"""
 
 flip_coin = FlipCoin(
     "Flip Coin",
@@ -154,5 +124,46 @@ roulette = Roulette(
     "\nRien ne va plus! Ball is spinning...\n...\n..."
 )
 
+games = [flip_coin, cho_han, battle, roulette]
+nums_to_game = {num:game for num, game in zip(range(1, len(games) + 1), games)}
+
+def get_game(input_dict=nums_to_game):
+    print("\nThese are the game currently available:")
+    for num, game in nums_to_game.items():
+        print("{}: {}".format(num, game.name))
+    while True:
+        num = input("\nPlease enter the number of the game you want to play: [1-{}] ".format(len(games))).strip()
+        try:
+            num = int(num)
+        except ValueError:
+            print("Please enter a number written in digits.")
+            continue
+        if num in input_dict:
+            return input_dict[num]
+        print("Please choose a number associated with a bet.")
+
 money = 100
-game_routine(battle)
+loser_string = """\n\nOh no, you have no more coins!\n
+Seems like today isn't your day at all...
+Don't worry, next time will be better!
+Come by soon and thank you for having played with Casinò Royale!"""
+# play the game
+print(
+    """\n\nWelcome to the Casinò Royale!
+
+Here you go: 100 shiny coins you can use to play all the games you want.
+Be careful though: if you finish them, it's game over.
+Best of luck and have a good time!"""
+    )
+while money > 0:
+    game = get_game()
+    game_routine(game)
+    if money == 0:
+        print(loser_string)
+        break
+    want_play_again = input("\nDo you want to play another game? [y/n] ").strip().lower()
+    if want_play_again != 'y':
+        check_out = input("\nAre you really sure you want to quit the game? [y/n] ").strip().lower()
+        if check_out == 'y':
+            print("\nThank you for having played with Casino Royale. Come by soon!")
+            break

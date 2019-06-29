@@ -31,7 +31,7 @@ def dfs(graph, current_vertex, target, visited=None, path=None):
     for adjacent in graph[current_vertex]:
         # using ignore as blind variable let the code run even with weighted graphs
         if type(adjacent) == tuple:
-            adjacent, ignore = adjacent
+            adjacent = adjacent[0]
         if adjacent not in visited:
             possible_path = dfs(graph, adjacent, target, visited, path)
             if possible_path:
@@ -60,7 +60,7 @@ def bfs(graph, origin, target):
         for adjacent in graph[current_vertex]:
             # this use of ignore is the same of dfs'
             if type(adjacent) == tuple:
-                adjacent, ignore = adjacent
+                adjacent = adjacent[0]
             if adjacent not in visited:
                 checked_count += 1
                 if adjacent == target:
@@ -391,3 +391,5 @@ coordinates = {
     'AI': (7, 12),
     'AJ': (4, 18)
 }
+
+print(dfs(very_complicate_graph, 'I', 'O'))

@@ -29,7 +29,6 @@ def dfs(graph, current_vertex, target, visited=None, path=None):
     
     # recursive step
     for adjacent in graph[current_vertex]:
-        # using ignore as blind variable let the code run even with weighted graphs
         if type(adjacent) == tuple:
             adjacent = adjacent[0]
         if adjacent not in visited:
@@ -58,7 +57,6 @@ def bfs(graph, origin, target):
         current_vertex, path = q.pop(0)
         visited.append(current_vertex)
         for adjacent in graph[current_vertex]:
-            # this use of ignore is the same of dfs'
             if type(adjacent) == tuple:
                 adjacent = adjacent[0]
             if adjacent not in visited:

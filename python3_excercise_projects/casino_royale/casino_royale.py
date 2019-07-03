@@ -1,4 +1,6 @@
 from casino_classes import FlipCoin, ChoHan, Battle, Roulette
+from highscores import generate_highscore_csv
+import csv
   
 def get_money_bet():
     print("\nYou have {} coins.".format(money))
@@ -147,14 +149,18 @@ loser_string = """\n\nOh no, you have no more coins!\n
 Seems like today isn't your day at all...
 Don't worry, next time will be better!
 Come by soon and thank you for having played with Casinò Royale!"""
-# play the game
-print(
-    """\n\nWelcome to the Casinò Royale!
 
-Here you go: 100 shiny coins you can use to play all the games you want.
-Be careful though: if you finish them, it's game over.
-Best of luck and have a good time!"""
-    )
+# play the game
+print("\n\nWelcome to the Casinò Royale!")
+name = input("Uh-oh, what's your name again? " ).strip().title()
+if len(name) > 8:
+    name = name[:8]
+
+#print(f"""Oh my, sure! Here you go, {name}: 100 shiny coins you can use to play all the games you want.
+#Be careful though: if you finish them, it's game over.
+#Best of luck and have a good time!"""
+#    )
+
 while money > 0:
     game = get_game()
     game_routine(game)
@@ -167,3 +173,33 @@ while money > 0:
         if check_out == 'y':
             print("\nThank you for having played with Casino Royale. Come by soon!")
             break
+
+# highscores creation and visualization
+generate_highscore_csv(name, money)
+
+with open('.highscores.csv') as f:
+    #print header
+    separator = ''.join(['=' for i in range(24)])
+    blank_line = '|' + ''.join([' ' for i in range(22)]) + '|'
+    thin_separator = ''.join(['-' for i in range(24)])
+    print('\n\n')
+    print(separator)
+    print(blank_line)
+    print("| BEST  PLAYERS  BOARD |")
+    print(blank_line)
+    print(separator)
+    
+    highscores = csv.DictReader(f)
+    for line in highscores:
+        print(blank_line)
+        current_and_position = f"| {line['current'] if line['current'] else ' '}  {line['position']} "
+        name = f" {line['name']} "
+        while len(name) < 10:
+            name += ' '
+        coins = f" {line['coins']}"
+        while len(coins) < 6:
+            coins += ' '
+        coins += '|'
+        score_line = current_and_position + name + coins
+        print(score_line)
+    print(separator)

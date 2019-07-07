@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- This project is an exercise in writing and styling webpages.
+I chose to use this document as a reference of the least common HTML tags and CSS properties, the ones that I already know I'll google in future -->
+<html>
+
+<head>
+    <title>Yuuki's HTML & CSS cheatsheet</title>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<header>
+    <hgroup>
+        <h1>HTML & CSS cheatsheet</h1>
+        <h2>Lovely made by me, highly customizable</h2>
+    </hgroup>
+</header>
+
+<main>
+    <section class="html">
+        <h2>HTML tags</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">tag</th> <!-- I want them in small capitals-->
+                    <th scope="col">description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>&lt;hgroup&gt;&lt;/hgroup&gt;</code></td>
+                    <td>Semantic. Denotes a group of &lt;h*&gt; tags, e.g. in the head of an article page.</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;img&gt; alt="..." &lt;/img&gt;</code></td>
+                    <td>New method to add the descripton of the image. Keep in mind that <code>alt</code> text will be read by accessibility software!</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;code&gt;&lt;/code&gt;</code></td> <!-- This should be monospaced and gray-->
+                    <td>Displays its contents styled in a fashion intended to indicate that the text is a short fragment of computer code.</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;section&gt;&lt;/section&gt;</code></td>
+                    <td>It's a logical divisor that works exactly like <code>&lt;div&gt;</code> but in a semantic way. It wraps a section of element in a meaningful way</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;span&gt;&lt;/span&gt;</code></td>
+                    <td>Logical in-line divisor.</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;video&gt;&lt;/video&gt;</code></td>
+                    <td>Embed a video in the page. Text between tags will be displayed if the browser is unable to load the video. Mandatory attributes are:
+                        <ul>
+                            <li><code>src</code> (instead of <code>href</code>): points to the video by its <span class="sc">url</span>;</li> <!-- defined sc class -->
+                            <li><code>width</code> and <code>height</code>;</li>
+                            <li><code>controls</code>: displays player controls.</li>
+                        </ul>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+
+</html>

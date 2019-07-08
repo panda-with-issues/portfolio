@@ -5,6 +5,7 @@ I chose to use this document as a reference of the least common HTML tags and CS
 
 <head>
     <title>Yuuki's HTML & CSS cheatsheet</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono&display=swap" rel="stylesheet" /> <!-- add a monospaced font for <code> -->
     <link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -23,8 +24,8 @@ I chose to use this document as a reference of the least common HTML tags and CS
         <table>
             <thead>
                 <tr>
-                    <th scope="col">tag</th> <!-- I want them in small capitals-->
-                    <th scope="col">description</th>
+                    <th scope="col">tag</th> 
+                    <th scope="col" class="rag_left">description</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +39,7 @@ I chose to use this document as a reference of the least common HTML tags and CS
                 </tr>
                 <tr>
                     <td><code>&lt;hgroup&gt;&lt;/hgroup&gt;</code></td>
-                    <td>Semantic. Denotes a group of &lt;h*&gt; tags, e.g. in the head of an article page.</td>
+                    <td>Semantic. Denotes a group of <code>&lt;h*&gt;</code> tags, e.g. in the head of an article page.</td>
                 </tr>
                 <tr>
                     <td><code>&lt;footer&gt;&lt;/footer&gt;</code></td>
@@ -109,17 +110,33 @@ I chose to use this document as a reference of the least common HTML tags and CS
             <thead>
                 <tr>
                     <th scope="col">property</th>
-                    <th scope="col">description</th>
+                    <th scope="col" class="rag_left">description</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><code>opacity</code></td>
-                    <td>Set the opacity of the element selected. Values must be between 0 (invisible) and 1 (normal). The short form is allowed, e.g. if we wanto to give a value of 50% opacity, we can give <code>.5</code> as value.</td>
-                </tr>
-                <tr>
                     <td><code>background-image: url(<em>path</em>)</code></td>
                     <td>Set an image as background of the element selected. <code><em>path</em></code> must be the image's URL.</td>
+                </tr>
+                <tr>
+                    <td><code>border-radius</code></td>
+                    <td>Takes an integer pixel's value and round the corners of an element.</td>
+                </tr>
+                <tr>
+                    <td><code>font-variant</code></td>
+                    <td>Takes the value of <code>small-caps</code> and returns the small-caps glyphs for the current font.</td>
+                </tr>
+                <tr>
+                    <td><code>margin</code></td>
+                    <td>Define the margins of a block element like <code>table</code>. To have it centered, just assign the <code>auto</code> value (it will get left and right margin equal).</td>
+                </tr>
+                <tr>
+                    <td><code><em>tag</em>:nth-child(<em>value</em>)</code></td>
+                    <td>Accepts <code>even</code> or <code>odd</code> as values and selects all of the element of <em>tag</em> that meets the criteria. In this table, for example, it's been used to color every even row of light blue.</td>
+                </tr>
+                <tr>
+                    <td><code>opacity</code></td>
+                    <td>Set the opacity of the element selected. Values must be between 0 (invisible) and 1 (normal). The short form is allowed, e.g. if we wanto to give a value of 50% opacity, we can give <code>.5</code> as value.</td>
                 </tr>
             </tbody>
         </table>

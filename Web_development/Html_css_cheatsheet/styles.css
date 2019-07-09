@@ -75,6 +75,7 @@ th {
     color: white;
     font-variant: small-caps;
     font-size: 15pt;
+    position: fixed;
 }
 
 th, td {

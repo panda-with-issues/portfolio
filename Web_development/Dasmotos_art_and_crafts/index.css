@@ -1,0 +1,26 @@
+h1 {
+    color: khaki;
+    font-family: Helvetica, sans-serif;
+    font-size: 100px;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2 {
+    color: white;
+    font-family: Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+header {
+    background-image: url(img/pattern.jpeg)
+}
+
+span {
+    
+}
+
+.green {
+    background-color: mediumspringgreen;
+}

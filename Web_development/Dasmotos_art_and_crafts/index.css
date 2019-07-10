@@ -1,6 +1,9 @@
-h1 {
-    color: khaki;
+body {
     font-family: Helvetica, sans-serif;
+}
+
+    h1 {
+    color: khaki;
     font-size: 100px;
     font-weight: bold;
     text-align: center;
@@ -8,7 +11,6 @@ h1 {
 
 h2 {
     color: white;
-    font-family: Helvetica, sans-serif;
     font-size: 32px;
     font-weight: bold;
 }
@@ -18,9 +20,18 @@ header {
 }
 
 span {
-    
+    color: blue;
+    font-weight: bold;
+}
+
+.blue {
+    background-color: skyblue;
 }
 
 .green {
     background-color: mediumspringgreen;
+}
+
+.pink {
+    background-color: lightcoral;
 }

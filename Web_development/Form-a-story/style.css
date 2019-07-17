@@ -3,8 +3,26 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
+header.container {
     background-color: white;
+    padding: 0;
+}
+
+header img {
+    width: 30%;
+}
+
+input {
+    margin: 5px;
+}
+
+
+input[type="number"] {
+    width: 1cm;
+}
+
+input[type="radio"] {
+    margin-left: 2vw;
 }
 
 input[type="submit"] {
@@ -15,17 +33,25 @@ input[type="submit"] {
     font-weight: 500;
 }
 
+textarea {
+    vertical-align: middle;
+}
+
 main {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-header img {
-    width: 30%;
+select {
+    margin: 5px;
 }
 
 .container {
+    border-radius: 15px;
     margin: 15px 10%;
     padding: 15px 10px;
     text-align: center;
-    border-radius: 15px;
+}
+
+.word {
+    text-decoration: underline;
 }

@@ -1,0 +1,152 @@
+/* Part of this code is provided by codecademy.com
+*  The exercise consists in bend the box model in order to obtain a plain and satisfying view of the web page.
+*  Every intervent of mine will be pointed out.
+*/
+
+/* Universal Styles */
+
+body {
+    background-image: url("https://s3.amazonaws.com/codecademy-content/courses/web-101/unit-6/htmlcss1-img_foodlogo.png");
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  /* Navigation */
+  
+  nav {
+    text-align: center;
+  }
+  
+  nav img {
+    display: block;
+    /* my code */
+    margin: 0 auto;
+    width: 180px;
+    /* end of my code */
+  }
+  
+  nav span {
+    display: block;
+    font-size: 16px;
+    font-weight: 100;
+    letter-spacing: 2px;
+    /* my code */
+    margin: 10px 0;
+    /* end of my code */
+  }
+  
+  nav a {
+    color: #666666;
+  }
+  
+  /* Content Container */
+  
+  .content {
+    width: 100%;
+    /* my code */
+    height: 500px;
+    margin: 10px auto;
+    overflow: auto;
+    /* end of my code */
+  }
+  
+  /* Content Header */
+  
+  .header {
+    background-image: url("https://s3.amazonaws.com/codecademy-content/courses/web-101/unit-6/htmlcss1-img_burgerphoto.jpeg");
+    background-position: center;
+    background-size: cover;
+    /* my code */
+    height: 320px;
+    /* end of my code */
+  }
+  
+  .header h1 {
+    background-color: #05A8AA;
+    color: #FFF;
+    font-family: 'Oswald', sans-serif;
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 40px;
+    width: 68%;
+    /* my code */
+    margin: 0 auto;
+    padding: 20px;
+    /* end of my code */
+  }
+  
+  /* Content Body */
+  
+  .content .body {
+    width: 90%;
+    /* my code */
+    margin: 0 auto;
+    /* end of my code */
+  }
+  
+  .body p {
+    color: #333333;
+    font-weight: 100;
+    line-height: 34px;
+    width: 90%;
+    margin-top: 18px;
+  }
+  
+  /* Content Button */
+  
+  .button {
+    border-radius: 4px;
+    color: #05A8AA;
+    display: block;
+    font-weight: 700;
+    /* my code */
+    border: 1px solid blue;
+    margin: 40px auto;
+    padding: 20px;
+    width: 200px;
+    /* end of my code */
+  }
+  
+  .button:hover {
+    background-color: #05A8AA;
+    border: 1px solid #05A8AA;
+    color: #FFF;
+  }
+  
+  /* Content Nutrition */
+  
+  /* my code */
+  ul.nutrition {
+      padding: 20px;
+  }
+/* end of my code */
+  
+  ul.nutrition li {
+    display: inline-block;
+    background-color: #05A8AA;
+    list-style: none;
+    /* my code */
+    margin-bottom: 3px;
+    padding: 10px 20px;
+    width: 200px;
+    /* end of my code */
+  }
+  
+  .nutrition .category {
+    color: white;
+    font-weight: 100;
+    letter-spacing: 2px;
+    display: block;
+  }
+  
+  .nutrition .value {
+    color: white;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }

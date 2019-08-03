@@ -390,4 +390,5 @@ coordinates = {
     'AJ': (4, 18)
 }
 
-print(dfs(very_complicate_graph, 'I', 'O'))
+print(dijkstra(very_complicate_graph, 'AG', 'W'))
+print(a_star(very_complicate_graph, 'AG', 'W', coordinates))

@@ -1,0 +1,113 @@
+/* This code is provided by codecademy.org */
+
+/* Universal Styles */
+
+body {
+    margin: 0px;
+    background-color: WhiteSmoke;
+    font-family: 'Rock Salt', cursive;
+    text-align: center;
+  }
+  
+  .secondary-background {
+    background-color: Snow;
+  }
+  
+  .tagline {
+    font-family: 'Quicksand', sans-serif;
+    color: LightSlateGrey;
+    line-height: 125px;
+  }
+  
+  /* Header */
+  
+  h1 {
+    margin: 0;
+    background-color: SkyBlue;
+    line-height: 100px;
+    color: Khaki;
+  }
+  
+  h2 {
+    margin: 10px;
+  }
+  
+  /* App Container */
+  
+  .container {
+    border: 2px solid Snow;
+    /* beginning of my code */
+    display: flex;
+    /* end of my code */
+  }
+  
+  /* To Do Section */
+  
+  .week {
+    /* beginning of my code */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    /* end of my code */
+  }
+  
+  .row {
+    min-height: 200px;
+    /* beginning of my code */
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    /* end of my code */
+  }
+  
+  .square {
+    /* beginning of my code */
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    /* end of my code */
+    width: 125px;
+    height: 125px;
+    padding: 10px;
+  }
+  
+  .day.square {
+    background-color: SkyBlue;
+    border: 1px solid white;
+  }
+  
+  .task.square {
+    background-color: Khaki;
+    border: 1px solid white;
+  }
+  
+  .task p {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  
+  /* Reminders */
+  
+  .reminders {
+    background-color: Khaki;
+    /* beginning of my code */
+    display: inline-flex;
+    flex-grow: 2;
+    /* end of my code */
+  }
+  
+  .reminders h3 {
+    width: 100%;
+    margin: 10px;
+    color: black;
+    line-height: 90px;
+    font-size: 24px;
+  }
+  
+  /* Footer */
+  
+  footer {
+    font-size: 24px;
+  }

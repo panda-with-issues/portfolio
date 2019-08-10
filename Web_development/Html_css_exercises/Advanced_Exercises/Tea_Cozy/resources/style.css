@@ -82,6 +82,47 @@ header li {
     width: 100%;
 }
 
+.card-container {
+    display: flex;
+    margin: 0 auto;
+    width: 78vw;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    margin: 1%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card img {
+    margin: 10px;
+    width: 23.4vw;
+    height: auto;
+}
+
+@media only screen and (max-width: 1054px) {
+
+    /* tea section */
+
+    .card {
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .card img {
+        width: 50%;
+    }
+}
+
 @media only screen and (max-width: 568px) {
 
     /* header style */

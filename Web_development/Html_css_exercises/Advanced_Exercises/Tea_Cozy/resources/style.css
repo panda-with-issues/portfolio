@@ -166,4 +166,22 @@ header li {
     h4 {
         font-weight: normal;
     }
+
+    .card-container,
+    .card,
+    .card:nth-child(even) {
+        flex-direction: column;
+    }
+
+    .card h4 {
+        position: relative;
+        top: -20%;
+        background-color: black;
+        padding: .3em;
+        border: 1px solid seashell;
+    }
+    
+    .card img {
+        width: 100%;
+    }
 }

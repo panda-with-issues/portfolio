@@ -37,7 +37,7 @@ h4 {
 header {
     display: flex;
     width: 100%;
-    max-height: 9.6vh;
+    min-height: 69px;
     position: fixed;
     top: 0;
     padding: 10px;
@@ -67,9 +67,9 @@ header li {
 #mission {
     display: flex;
     flex-direction: column;
-    margin: 69px auto;
+    margin: 71px auto;
     width: 93.75vw;
-    height: 92vh;
+    height: 93.42vh;
     background-image: url(img/img-mission-background.jpg);
     background-position: center;
     background-size: cover;
@@ -123,6 +123,16 @@ header li {
     }
 }
 
+@media only screen and (max-height: 734px) {
+
+    /* body style */
+
+    #mission {
+        margin: 69px auto;
+    }
+}
+
+
 @media only screen and (max-width: 568px) {
 
     /* header style */
@@ -157,4 +167,3 @@ header li {
         font-weight: normal;
     }
 }
-

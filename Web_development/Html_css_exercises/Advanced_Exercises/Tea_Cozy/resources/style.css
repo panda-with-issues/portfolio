@@ -27,9 +27,28 @@ a:hover {
     color: #ddd;
 }
 
+div,
+section {
+    justify-content: center;
+}
+
 h2,
 h4 {
     margin: .5em;
+}
+
+.flex-bg {
+    display: flex;
+    flex-direction: column;
+    width: 93.75vw;
+    background-position: center;
+    background-size: cover;
+    align-items: center;
+}
+
+.fullscreen {
+    margin: 71px auto;
+    height: 93.42vh;
 }
 
 /* header style */
@@ -64,17 +83,10 @@ header li {
 
 /* body style */
 
+/* mission section */
+
 #mission {
-    display: flex;
-    flex-direction: column;
-    margin: 71px auto;
-    width: 93.75vw;
-    height: 93.42vh;
     background-image: url(img/img-mission-background.jpg);
-    background-position: center;
-    background-size: cover;
-    justify-content: center;
-    align-items: center;
 }
 
 .title-container {
@@ -82,19 +94,19 @@ header li {
     width: 100%;
 }
 
+/* tea section */
+
 .card-container {
     display: flex;
     margin: 0 auto;
     width: 78vw;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .card {
     display: flex;
     margin: 1%;
     flex-direction: column;
-    justify-content: center;
 }
 
 .card img {
@@ -103,18 +115,61 @@ header li {
     height: auto;
 }
 
+/* location section */
+
+#location-bg {
+    margin-bottom: 0;
+    background-image: url(img/img-locations-background.jpg);
+    height: 71.42%;
+}
+
+#location .card-container {
+    margin: .68rem auto 0;
+    width: 100%
+}
+
+#location .card {
+    margin: 0 .90rem;
+    width: 24vw;
+    height: 24vw;
+    max-width: 300px;
+    max-height: 300px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 .3rem;
+    background-color: black;
+    opacity: 1;
+}
+
+#location-bg h2 {
+    margin-bottom: 0;
+}
+
+#contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 28.58%;
+}
+
+/* footer */
+
+footer {
+    text-align: left;
+    margin: 20vh .9rem .9rem;
+}
+
 @media only screen and (max-width: 1054px) {
 
     /* tea section */
 
-    .card {
+    #tea .card {
         flex-direction: row;
         width: 100%;
         align-items: center;
-        justify-content: center;
     }
 
-    .card:nth-child(even) {
+    #tea .card:nth-child(even) {
         flex-direction: row-reverse;
     }
 
@@ -123,15 +178,25 @@ header li {
     }
 }
 
-@media only screen and (max-height: 734px) {
+@media only screen and (max-width: 817px) {
 
-    /* body style */
+    /* location section */
 
-    #mission {
-        margin: 69px auto;
+    #location .card-container {
+        flex-direction: column;
+        width: 100%
+    }
+
+    #location .card {
+        display: flex;
+        flex-direction: row;
+        margin: 1em auto;
+        padding: .3em;
+        max-width: none;
+        width: 100%;
+        height: auto;
     }
 }
-
 
 @media only screen and (max-width: 568px) {
 
@@ -167,9 +232,11 @@ header li {
         font-weight: normal;
     }
 
+    /* tea section */
+
     .card-container,
-    .card,
-    .card:nth-child(even) {
+    #tea .card,
+    #tea .card:nth-child(even) {
         flex-direction: column;
     }
 
@@ -183,5 +250,45 @@ header li {
     
     .card img {
         width: 100%;
+    }
+
+    /* location section */
+
+    #location .card {
+        flex-direction: column;
+    }
+
+    .card h3 {
+        font-weight: 400;
+    }
+
+    .card p {
+        font-size: .8rem;
+    }
+}
+
+@media only screen and (max-height: 740px) {
+
+    #mission {
+        margin: 69px auto;
+    }
+
+    #location {
+        height: 120vh;
+    }
+}
+
+@media only screen and (max-height: 572px) {
+
+    header {
+        position: static;
+    }
+
+    #mission {
+        margin-top: 0;
+    }
+
+    #location {
+        height: 150vh;
     }
 }

@@ -83,18 +83,18 @@ const wordsToExclude = storyWords.filter(word => {
 
 console.log(isEqual(wordsToExclude, ExcludedWords(storyWords, getDiffIds(storyWords, betterWords))))
 // returns true
-// task seems completed succesfully
+// task seems completed successfully
 
 /*
 * There is an array of words called overusedWords. These are words overused in this story. You want to let the user of your program know how many times they have used these overused words.
 */
 
-function countOverusedWords(arr1, words) {
+function countOverusedWords(arr, words) {
   // create an array of array in which every type of overused words will be stored, e.g. [[really], [very, very, very], []]
   const result = []
   words.forEach(word => result.push([]))
   // loop through text to fill nested arrays based on word's index in overusedWords
-  arr1.forEach(word => {
+  arr.forEach(word => {
     if (overusedWords.includes(word)) {
       let idx = overusedWords.indexOf(word)
       result[idx].push(word)
@@ -116,7 +116,7 @@ const very = betterWords.filter(word => word === 'very')
 const basically = betterWords.filter(word => word === 'basically')
 console.log(really.length, very.length, basically.length)
 // returns 2, 5, 1
-// task seems to be completed succesfully
+// task seems to be completed successfully
 
 /*
 * Now, count how many sentences are in the paragraph.
@@ -132,6 +132,69 @@ function getSentenceCount (arr) {
   return count
 }
 
-getSentenceCount(betterWords)
+console.log(getSentenceCount(betterWords))
 // returns 12
 
+//test function
+function getPunctuation (str) {
+  const characters = str.split('')
+  const punctuation = characters.filter(char => {
+    return char === '.' || char === '!' || char === '?'
+  })
+  return punctuation.length
+}
+
+console.log(getPunctuation(story));
+// returns 12
+//task seems completed successfully
+
+/*
+* Log these items to the console:
+*
+* - The word count
+* - The sentence count
+* - The number of times each overused word appears
+*/
+
+function logInfos () {
+  console.log('Words used: ' + betterWords.length)
+  console.log('Sentence number: ', getSentenceCount(betterWords))
+  countOverusedWords(betterWords, overusedWords)  
+};
+
+logInfos()
+// task completed
+
+/*
+* Now, log the betterWords array to the console as a single string.
+*/
+
+console.log(betterWords.join(' '))
+
+/*
+* Challenge task: write a function that finds the word that appears the greatest number of times.
+*/
+
+function getMostUsedWord (arr) {
+  let mostUsedWord
+  let max = 0
+  const checked = []
+  arr.forEach(word => {
+    if (!checked.includes(word)) {
+      checked.push(word)
+      let count = 0
+      for (let i = 0; i < arr.length; i++) {
+        if (word === arr[i]) {
+          count++
+        }
+      }
+      if (count > max) {
+        max = count
+        mostUsedWord = word
+      }
+    }
+  })
+  return mostUsedWord
+}
+
+console.log('Most used word is "' + getMostUsedWord(betterWords) + '"')

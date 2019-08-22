@@ -50,7 +50,8 @@ function isEqual (arr1, arr2) {
   return true
 }
 
-console.log(isEqual(storyWords, betterWords)) // false
+console.log(isEqual(storyWords, betterWords))
+// false
 
 function getDiffIds (arr1, arr2) {
   const ids = []
@@ -81,13 +82,56 @@ const wordsToExclude = storyWords.filter(word => {
 })
 
 console.log(isEqual(wordsToExclude, ExcludedWords(storyWords, getDiffIds(storyWords, betterWords))))
-// return true
+// returns true
 // task seems completed succesfully
 
+/*
+* There is an array of words called overusedWords. These are words overused in this story. You want to let the user of your program know how many times they have used these overused words.
+*/
 
+function countOverusedWords(arr1, words) {
+  // create an array of array in which every type of overused words will be stored, e.g. [[really], [very, very, very], []]
+  const result = []
+  words.forEach(word => result.push([]))
+  // loop through text to fill nested arrays based on word's index in overusedWords
+  arr1.forEach(word => {
+    if (overusedWords.includes(word)) {
+      let idx = overusedWords.indexOf(word)
+      result[idx].push(word)
+    }
+  })
+  // pair every word to its count and log to console
+  result.forEach(arr => {
+    idx = result.indexOf(arr)
+    console.log(`"${overusedWords[idx]}" has been used ${arr.length} times.`);
+  })
+};
 
+countOverusedWords(betterWords, overusedWords)
+// returns really: 2, very: 5, basically: 1
 
-// function countOverusedWords(arr1, words) {
-//   const array
-  
-// }
+//follow several tests
+const really = betterWords.filter(word => word === 'really')
+const very = betterWords.filter(word => word === 'very')
+const basically = betterWords.filter(word => word === 'basically')
+console.log(really.length, very.length, basically.length)
+// returns 2, 5, 1
+// task seems to be completed succesfully
+
+/*
+* Now, count how many sentences are in the paragraph.
+*/
+
+function getSentenceCount (arr) {
+  let count = 0
+  betterWords.forEach(word => {
+    if (word[word.length - 1] === '.' || word[word.length - 1] === '!' || word[word.length - 1] === '?') {
+      count++
+    }
+  })
+  return count
+}
+
+getSentenceCount(betterWords)
+// returns 12
+

@@ -64,6 +64,11 @@ const _ = {
     }
     return str
   },
+  /* 
+  * Task 5:
+  * Let’s begin implementing some new object methods! The first object method we will implement is .has(). It takes two arguments: an object and a path. .has() checks to see if the provided object contains a value at the specified key.
+  * .has() will return true if the object contains a value at the key and will return false if not
+  */
   has (obj, path) {
     if (typeof path === 'string') {
       path = path.split(/[.[\]']/) // match . [ ] '
@@ -82,15 +87,71 @@ const _ = {
     const nextProperty = path.shift()
     obj = obj[nextProperty]
     return this.has(obj, path)
+  },
+  /*
+  * Task 6:
+  * The next object method we will implement is .invert(). It takes one argument -- an object --, iterates through each key / value pair in the provided object and swaps the key and value
+  */
+  invert (obj) {
+    const result = {}
+    for (const prop in obj) {
+      result[obj[prop]] = prop
+    }
+    return result
+  },
+  /*
+  * The final object method we will implement is .findKey(). It takes two arguments: an object and a predicate function — a function that returns a boolean value.
+  * .findKey() iterates through each key / value pair in the provided object and calls the predicate function with the value
+  * .findKey() returns the first key that has a value that returns a truthy value from the predicate function
+  * .findKey() returns undefined if no values return truthy values from the predicate function
+  */
+  findKey (obj, predicate) {
+    const compareObj = (obj1, obj2) => {
+      // return true if obj 1 and obj 2 have same properties
+      const keys1 = Object.keys(obj1)
+      const keys2 = Object.keys(obj2)
+      if (keys1.length !== keys2.length) {
+        return false
+      }
+      if (keys1.every(key => keys2.includes(key))) {
+        for (let key in obj1) {
+          if (obj1[key] !== obj2[key]) {
+            return false
+          }
+        }
+        return true
+      }
+      return false
+    }
+    // predicate is an object
+    if (typeof predicate === 'object') {
+      for (const key in obj) {
+        if (compareObj(obj[key], predicate)) {
+          return key
+        }
+      }
+    }
+    // predicate is a function
+    for (const key in obj) {
+      if (predicate(obj[key])) {
+        return key
+      }
+    }
   }
 }
 
-const test = {
-  a: 'minchia',
-  b: {
-    'sti cazzi': 'wow',
-    c: 'pene'
+const obj1 = {
+  a: 1,
+  b: 2,
+  c: {
+    nutella: 'pizza',
+    maccheroni: 'pasta'
   }
 }
 
-console.log(_.has(test, "c"))
+const obj2 = {
+  a: 1,
+  b: 2
+}
+
+console.log(_.findKey(obj1, {nutella: 'pizza', maccheroni: 'pasta'}))

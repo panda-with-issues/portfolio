@@ -64,7 +64,7 @@ const _ = {
     }
     return str
   },
-  /* 
+  /*
   * Task 5:
   * Let’s begin implementing some new object methods! The first object method we will implement is .has(). It takes two arguments: an object and a path. .has() checks to see if the provided object contains a value at the specified key.
   * .has() will return true if the object contains a value at the key and will return false if not
@@ -100,58 +100,56 @@ const _ = {
     return result
   },
   /*
+  * Task 7:
   * The final object method we will implement is .findKey(). It takes two arguments: an object and a predicate function — a function that returns a boolean value.
   * .findKey() iterates through each key / value pair in the provided object and calls the predicate function with the value
   * .findKey() returns the first key that has a value that returns a truthy value from the predicate function
   * .findKey() returns undefined if no values return truthy values from the predicate function
   */
   findKey (obj, predicate) {
-    const compareObj = (obj1, obj2) => {
-      // return true if obj 1 and obj 2 have same properties
-      const keys1 = Object.keys(obj1)
-      const keys2 = Object.keys(obj2)
-      if (keys1.length !== keys2.length) {
-        return false
-      }
-      if (keys1.every(key => keys2.includes(key))) {
-        for (let key in obj1) {
-          if (obj1[key] !== obj2[key]) {
-            return false
-          }
-        }
-        return true
-      }
-      return false
-    }
-    // predicate is an object
-    if (typeof predicate === 'object') {
-      for (const key in obj) {
-        if (compareObj(obj[key], predicate)) {
-          return key
-        }
-      }
-    }
-    // predicate is a function
     for (const key in obj) {
       if (predicate(obj[key])) {
         return key
       }
     }
+  },
+  /*
+  * Task 8:
+  * It’s time to start implementing methods for our final data type: arrays! The first array method we will implement is .drop(). It takes two arguments: an array and a number representing the number of items to drop from the beginning of the array
+  * .drop() returns a new array which contains the elements from the original array, excluding the specified number of elements from the beginning of the array
+  * If the number of elements to drop is unspecified, your method should drop one element
+  */
+  drop (arr, n) {
+    if (typeof n === 'undefined') {
+      n = 1
+    }
+    return arr.slice(n)
+  },
+  /*
+  * Task 9:
+  * The next array method we will implement is .dropWhile(). It takes two arguments: an array and a predicate function
+  * The supplied predicate function takes three arguments: the current element, the current element index, and the whole array
+  * .dropWhile() creates a new copy of the supplied array, dropping elements from the beginning of the array until an element causes the predicate function to return a falsy value
+  */
+  dropWhile (arr, func) {
+    const arrCopy = arr.slice()
+    const n = arrCopy.findIndex((val, idx) => !func(val, idx, arrCopy))
+    return arrCopy.slice(n)
+  },
+  /*
+  * Task 9
+  * The last array method we will implement is .chunk(). It takes two arguments: an array and a size
+  * .chunk() breaks up the supplied array into arrays of the specified size
+  * .chunk() returns an array containing all of the previously-created array chunks in the order of the original array
+  * If the array can’t be broken up evenly, the last chunk will be smaller than the specified size
+  * If no size is supplied to the method, the size is set to 1
+  */
+  chunk (arr, length) {
+    if (typeof length === 'undefined') length = 1
+    const result = []
+    while (arr.length) {
+      result.push(arr.splice(0, length))
+    }
+    return result
   }
 }
-
-const obj1 = {
-  a: 1,
-  b: 2,
-  c: {
-    nutella: 'pizza',
-    maccheroni: 'pasta'
-  }
-}
-
-const obj2 = {
-  a: 1,
-  b: 2
-}
-
-console.log(_.findKey(obj1, {nutella: 'pizza', maccheroni: 'pasta'}))

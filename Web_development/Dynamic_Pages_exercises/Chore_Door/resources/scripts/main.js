@@ -6,7 +6,7 @@ const startButton = document.getElementById('start')
 const botPath = 'resources/imgs/bot.svg'
 const beachPath = 'resources/imgs/beach.svg'
 const spacePath = 'resources/imgs/space.svg'
-const closedPath = '../imgs/closed_door.svg'
+const closedPath = 'resources/imgs/closed_door.svg'
 
 let numClosedDoors = 3
 let openDoor1
@@ -14,20 +14,9 @@ let openDoor2
 let openDoor3
 let currentlyPlaying = true
 
-const isClicked = door => {
-  if (door.src === closedPath) {
-    console.log('false')
-    return false
-  }
-  console.log('true')
-  return true
-}
-const isBot = door => {
-  if (door.src === botPath) {
-    return true
-  }
-  return false
-}
+const isClicked = door => !door.src.endsWith(closedPath)
+
+const isBot = door => door.src.endsWith(botPath)
 
 function gameOver (status) {
   if (status === 'win') {
@@ -68,6 +57,7 @@ function startRound () {
   door1.src = closedPath
   door2.src = closedPath
   door3.src = closedPath
+  numClosedDoors = 3
   startButton.innerHTML = 'Good luck!'
   currentlyPlaying = true
   randomChoreDoorGenerator()
@@ -100,5 +90,5 @@ startButton.onclick = () => {
   }
 }
 
+// play game
 startRound()
-console.log(isClicked(door1))

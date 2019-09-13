@@ -131,4 +131,4 @@ console.log(historyOfEverything.isCheckedOut) // returns true
 historyOfEverything.addRating(4)
 historyOfEverything.addRating(5)
 historyOfEverything.addRating(5)
-console.log(historyOfEverything.getAverageRating())
+console.log(historyOfEverything.getAverageRating()) // returns 4.7 (4.6666666)

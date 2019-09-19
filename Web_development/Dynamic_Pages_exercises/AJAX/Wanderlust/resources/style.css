@@ -1,0 +1,64 @@
+/* global styles */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* header style */
+
+header img {
+  margin: 1vh;
+}
+
+/* static style */
+
+#static-container {
+  display: flex;
+  flex-direction: column;
+  height: 40vh;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/wanderlust/background_photo_desktop.jpg');
+  background-attachment: center;
+  background-size: cover;
+  }
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-size: 4rem;
+  margin: .6em;
+}
+
+form {
+  width: 100%;
+  text-align: center;
+}
+
+input, button {
+  height: 5vh;
+}
+
+#destination {
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 5px;
+  width: 15%;
+  padding: 1%;
+  color: white;
+}
+
+button {
+  padding: 0 2%;
+  background-color: #27b7c1;
+  color: white;
+  border-radius: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  letter-spacing: .5px;
+}
+
+button:hover {
+  cursor: pointer;
+}

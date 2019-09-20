@@ -7,6 +7,21 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:200&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./resources/style.css" type="text/css">
   <script src="./resources/Scripts/main.js" type="module" defer></script>
+  <!-- import handlebars.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.2.0/handlebars.min.js"></script>
+  <script id="handlebars" type="text/x-handlebars-template">
+    <h3>TOP ATTRACTIONS</h3>
+    {{#each locations}}
+      <div>
+        <h3>{{this.name}}</h3>
+        <img src="{{this.icon}}" alt="location icon">
+        <h4>Address</h4>
+        <p>{{this.address}}</p>
+      </div>
+      {{else}}
+      <p>porco dio</p>
+    {{/each}}
+  </script>
   <title>Wanderlust</title>
 </head>
 <body>
@@ -21,6 +36,7 @@
         <button id="submit-button" type="button">Submit</button>
       </form>
     </section>
+    <section id="hb-container"></section>
   </main>
   
 </body>

@@ -5,6 +5,14 @@
   padding: 0;
 }
 
+body {
+  font-family: 'Work Sans', sans-serif;
+}
+
+h1, h2 {
+  font-family: 'Montserrat', Helvetica, sans-serif;
+}
+
 /* header style */
 
 header img {
@@ -25,7 +33,6 @@ header img {
   }
 
 h1 {
-  font-family: 'Montserrat', sans-serif;
   color: white;
   font-size: 4rem;
   margin: .6em;
@@ -40,7 +47,7 @@ input, button {
   height: 5vh;
 }
 
-#destination {
+#destination-field {
   background-color: transparent;
   border: 2px solid white;
   border-radius: 5px;
@@ -62,3 +69,48 @@ button {
 button:hover {
   cursor: pointer;
 }
+
+/* Dynamic styles */
+
+.informations {
+  margin: 2rem auto;
+  width: 80%;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: .2em;
+  color: #4a4a4a;
+}
+
+#destination {
+  font-size: 2rem;
+  color: #27b7c1;
+  font-weight: 600;
+  letter-spacing: normal;
+  margin-bottom: 1rem;
+}
+
+.card-container {
+  display: flex;
+  width: 100%;
+  margin: 2rem 0;
+  height: 30%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 20%;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
+  padding: 1em;
+}
+
+.card img {
+  width: 64px;
+  height: auto;
+}
+

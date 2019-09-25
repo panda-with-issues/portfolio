@@ -3,24 +3,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- import Montserrat font, weight 200 extra-light -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:200&display=swap" rel="stylesheet">
+  <!-- import Montserrat font, weight 200 extra-light and 600 semi-bold; import Work Sans regular-->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:200,600|Work+Sans:300&display=swap" rel="stylesheet"> 
   <link rel="stylesheet" href="./resources/style.css" type="text/css">
   <script src="./resources/Scripts/main.js" type="module" defer></script>
   <!-- import handlebars.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.2.0/handlebars.min.js"></script>
   <script id="handlebars" type="text/x-handlebars-template">
-    <h3>TOP ATTRACTIONS</h3>
-    {{#each locations}}
-      <div>
-        <h3>{{this.name}}</h3>
-        <img src="{{this.icon}}" alt="location icon">
-        <h4>Address</h4>
-        <p>{{this.address}}</p>
+    <section class="informations">
+      <h2 id="destination">{{destination}}</h2>
+      <h2>TOP ATTRACTIONS</h2>
+      <div class="card-container">
+      {{#each locations}}
+        <div class="card">
+          <h3>{{this.name}}</h3>
+          <img src="{{this.icon}}" alt="location icon">
+          <div>
+            <h4>Address</h4>
+            <p>{{this.address}}</p>
+          </div>
+        </div>
+        {{else}}
+        <p>porco dio</p>
+      {{/each}}
       </div>
-      {{else}}
-      <p>porco dio</p>
-    {{/each}}
+    </section>
   </script>
   <title>Wanderlust</title>
 </head>
@@ -32,8 +39,8 @@
     <section id="static-container">
       <h1>Where do you want to land?</h1>
       <form>
-        <input id="destination" type="text">
-        <button id="submit-button" type="button">Submit</button>
+        <input id="destination-field" type="text">
+        <button id="submit-button" type="submit">Submit</button>
       </form>
     </section>
     <section id="hb-container"></section>

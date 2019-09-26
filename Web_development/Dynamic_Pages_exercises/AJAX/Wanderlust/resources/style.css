@@ -74,7 +74,7 @@ button:hover {
 
 .informations {
   margin: 2rem auto;
-  width: 80%;
+  width: 70%;
 }
 
 h2 {
@@ -102,15 +102,29 @@ h2 {
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
   width: 20%;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
   padding: 1em;
 }
 
-.card img {
-  width: 64px;
-  height: auto;
+h3 {
+  text-align: center;
 }
 
+h4 {
+  color: #27b7c1;
+}
+
+.card img {
+  height: auto;
+  margin: 2rem auto;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}

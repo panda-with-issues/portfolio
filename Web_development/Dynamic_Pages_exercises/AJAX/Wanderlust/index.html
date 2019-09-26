@@ -12,6 +12,35 @@
   <script id="handlebars" type="text/x-handlebars-template">
     <section class="informations">
       <h2 id="destination">{{destination}}</h2>
+      <h2>WEATHER</h2>
+      <div class="card-container">
+        {{#each days}}
+          <div class="card">
+            <p>{{this.date}}</p>
+            <p>{{this.time}}</p>
+            <img src="http://openweathermap.org/img/wn/{{this.icon}}@2x.png" alt="weather icon">
+            <p>{{this.description}}</p>
+            <table>
+              <tr>
+                <th>
+                  <h4>Temperature</h4>
+                </th>
+                <th>
+                  <h4>Humidity</h4>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p>{{this.temperature}}°C</p>
+                </td>
+                <td>
+                  <p>{{this.humidity}}%</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        {{/each}}
+      </div>
       <h2>TOP ATTRACTIONS</h2>
       <div class="card-container">
       {{#each locations}}

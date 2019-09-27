@@ -3,14 +3,20 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   font-family: 'Work Sans', sans-serif;
+  font-weight: 300;
 }
 
 h1, h2 {
   font-family: 'Montserrat', Helvetica, sans-serif;
+}
+
+.center {
+  text-align: center;
 }
 
 /* header style */
@@ -25,6 +31,7 @@ header img {
   display: flex;
   flex-direction: column;
   height: 40vh;
+  min-height: 140px;
   justify-content: center;
   align-items: center;
   background-image: url('https://s3.amazonaws.com/codecademy-content/courses/intermediate-javascript-requests/wanderlust/background_photo_desktop.jpg');
@@ -52,11 +59,14 @@ input, button {
   border: 2px solid white;
   border-radius: 5px;
   width: 15%;
+  min-width: 240px;
+  min-height: 30px;
   padding: 1%;
   color: white;
 }
 
 button {
+  min-height: 30px;
   padding: 0 2%;
   background-color: #27b7c1;
   color: white;
@@ -95,37 +105,125 @@ h2 {
 .card-container {
   justify-content: center;
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
+  min-width: 250px;
   margin: 2rem 0;
-  height: 30%;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-content: center;
   width: 20%;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
+  min-width: 250px;
+  min-height: 235px;
   padding: 1em;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
 }
 
 h3 {
   text-align: center;
+  font-weight: 300;
 }
 
 h4 {
   color: #27b7c1;
+  font-weight: 400;
 }
 
-.card img {
+.icon {
   height: auto;
-  margin: 2rem auto;
+  margin: 0 auto;
+}
+
+.location {
+  min-width: 64px;
+}
+
+.weather {
+  min-width: 90px;
 }
 
 table {
   width: 100%;
+  font-weight: 300;
 }
 
 th {
   text-align: left;
+}
+
+/* footer style */
+
+footer {
+  background-color: #63c7e9;
+  color: white;
+  text-align: right;
+  padding: .5rem 1rem;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 400;
+}
+
+footer a {
+  text-decoration: none;
+  color: white;
+  font-weight: 800;
+}
+
+/* portable styles */
+
+@media only screen and (max-width: 1024px) {
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  #static-container {
+    height: 20vh;
+  }
+
+  .informations {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 714px) {
+
+  .informations {
+    width: 95%;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 508px) {
+
+  header img {
+    height: 2vh;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  #destination-field {
+    min-width: 160px;
+  }
+
+  #static-container {
+    height: 20vh;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  p, td, button {
+    font-size: 10pt;
+  }
+
+  footer {
+    padding: 0 5px;
+  }
 }

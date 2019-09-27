@@ -142,7 +142,6 @@ async function getWeather () {
     if (response.ok) {
       const jsonResponse = await response.json()
       const days = jsonResponse.list.filter(element => jsonResponse.list.indexOf(element) % 8 === 0)
-      console.log(days)
       // populate context with fetched data
       days.forEach(day => {
         const dayObj = {}

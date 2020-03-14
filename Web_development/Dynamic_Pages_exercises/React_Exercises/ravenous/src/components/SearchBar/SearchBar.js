@@ -20,7 +20,7 @@ class SearchBar extends React.Component {
       <div className="SearchBar">
         <div className="SearchBar-sort-options">
           <ul>
-            {this.renderSortByOptions()} // sono molto insicura di questc
+            {this.renderSortByOptions()}
           </ul>
         </div>
         <div className="SearchBar-fields">

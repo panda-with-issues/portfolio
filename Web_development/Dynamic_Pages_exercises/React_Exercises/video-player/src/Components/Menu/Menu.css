@@ -1,0 +1,21 @@
+.menu {
+  display: flex;
+  margin: 5vh auto;
+  width: 20vw;
+  min-width: 200px;
+  justify-content: space-between;
+}
+
+p {
+  color: white;
+  padding: 5px 5%;
+  border: solid 1px white;
+  border-radius: 5px;
+}
+
+p:hover {
+  border-color: #5A5494;
+  color: #5A5494;
+  background-color: white;
+  cursor: pointer;
+}

@@ -11,7 +11,7 @@ function validateSalary (req, res, next) {
   const stringSalary = req.body.salary
   try {
     const salary = Number(stringSalary)
-    if (typeof salary === 'number') {
+    if (!isNaN(salary)) {
       req.salary = salary
       next()
     } else {
@@ -45,10 +45,10 @@ minions.post('/', validateSalary, (req, res, next) => {
   }
 })
 
-minions.param('id', (req, res, next, id) => {
-  const minion = db.getFromDatabaseById('minions', req.params.id)
+minions.param('minionId', (req, res, next, id) => {
+  const minion = db.getFromDatabaseById('minions', id)
   if (minion) {
-    req.id = id
+    req.minionId = id
     req.minion = minion
     next()
   } else {
@@ -58,13 +58,13 @@ minions.param('id', (req, res, next, id) => {
   }
 })
 
-minions.get('/:id', (req, res, next) => {
+minions.get('/:minionId', (req, res, next) => {
   res.send(req.minion)
 })
 
-minions.put('/:id', validateSalary, (req, res, next) => {
+minions.put('/:minionId', validateSalary, (req, res, next) => {
   const newInfos = {
-    id: req.id,
+    id: req.minionId,
     name: req.body.name,
     title: req.body.title,
     salary: req.salary,
@@ -78,8 +78,8 @@ minions.put('/:id', validateSalary, (req, res, next) => {
   }
 })
 
-minions.delete('/:id', (req, res, next) => {
-  db.deleteFromDatabaseById('minions', req.id)
+minions.delete('/:minionId', (req, res, next) => {
+  db.deleteFromDatabaseById('minions', req.minionId)
   res.status(204).send()
 })
 
